@@ -46,4 +46,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function kampus()
+    {
+        return $this->belongsTo(Kampus::class);
+    }
+
 }

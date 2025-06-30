@@ -11,5 +11,9 @@ class Mahasiswa extends Model
     public function kampus() {
         return $this->belongsTo(Kampus::class);
     }
+    public function pengajuans()
+    {
+        return $this->belongsToMany(Pengajuan::class, 'pengajuan_mahasiswa');
+    }
 
 }

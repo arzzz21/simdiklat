@@ -32,6 +32,25 @@
                 <li><a href="{{ route('jenis-program.index') }}"><i class="bx bx-clipboard"></i><span>Jenis Program</span></a></li>
                 @endrole
 
+                {{-- Tambah Dosen --}}
+                @if(auth()->user()->hasRole('admin'))
+                    <li>
+                        <a href="{{ route('admin.dosen.index') }}">
+                            <i class="bx bx-user"></i> <span>Dosen</span>
+                        </a>
+                    </li>
+                @endif
+
+                {{-- Pengajuan --}}
+                @role('dosen')
+                    <li class="menu-title">Pengajuan</li>
+                    <li>
+                        <a href="{{ route('dosen.pengajuan.index') }}" class="waves-effect">
+                            <i class="bx bx-send"></i>
+                            <span>Pengajuan</span>
+                        </a>
+                    </li>
+                @endrole
             </ul>
         </div>
     </div>
