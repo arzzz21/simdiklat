@@ -43,10 +43,17 @@
 
                 {{-- Pengajuan --}}
                 @role('dosen')
-                    <li class="menu-title">Manajemen</li>
+                    {{-- <li class="menu-title">Manajemen</li>
                     <li>
                         <a href="{{ route('dosen.pengajuan.index') }}" class="waves-effect">
                             <i class="bx bx-send"></i>
+                            <span>Pengajuan</span>
+                        </a>
+                    </li> --}}
+                    <li class="menu-title">Dosen</li>
+                    <li class="{{ request()->routeIs('dosen.pengajuan.index') ? 'active' : '' }}">
+                        <a href="{{ route('dosen.pengajuan.index') }}">
+                            <i class="mdi mdi-file-document"></i>
                             <span>Pengajuan</span>
                         </a>
                     </li>
@@ -58,6 +65,13 @@
                     <a href="{{ route('admin.pengajuan.index') }}">
                         <i class="mdi mdi-clipboard-list"></i> <span>Pengajuan Masuk</span>
                     </a>
+                    </li>
+                    <li class="menu-title">Admin</li>
+                    <li class="{{ request()->routeIs('admin.pengajuan.verifikasi.index') ? 'active' : '' }}">
+                        <a href="{{ route('admin.pengajuan.verifikasi.index') }}">
+                            <i class="mdi mdi-file-check"></i>
+                            <span>Verifikasi Berkas</span>
+                        </a>
                     </li>
                 @endrole
             </ul>

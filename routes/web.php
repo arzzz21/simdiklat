@@ -8,6 +8,8 @@ use App\Http\Controllers\JenisProgramController;
 use App\Http\Controllers\Admin\DosenController;
 use App\Http\Controllers\Admin\PengajuanController as AdminPengajuanController;
 use App\Http\Controllers\Dosen\PengajuanController as DosenPengajuanController;
+use App\Http\Controllers\Admin\BerkasController as AdminBerkasController;
+use App\Http\Controllers\Dosen\BerkasController as DosenBerkasController;
 
 
 // Route::get('/', function () {
@@ -81,5 +83,22 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/pengajuan', [AdminPengajuanController::class, 'index'])->name('admin.pengajuan.index');
     Route::post('/pengajuan/{id}/verifikasi', [AdminPengajuanController::class, 'verifikasi'])->name('admin.pengajuan.verifikasi');
 });
+
+//Berkas Pengajuan
+Route::get('/pengajuan/{id}/berkas', [DosenBerkasController::class, 'index'])->name('dosen.pengajuan.berkas');
+Route::post('/pengajuan/{id}/berkas', [DosenBerkasController::class, 'store'])->name('dosen.pengajuan.berkas.store');
+Route::delete('/berkas/{id}', [DosenBerkasController::class, 'destroy'])->name('dosen.pengajuan.berkas.destroy');
+
+//Verifikasi Berkas
+// Route::prefix('admin')->middleware(['auth'])->group(function () {
+// Route::get('/berkas', [AdminBerkasController::class, 'index'])->name('admin.berkas.index');
+// Route::post('/berkas/{id}/verifikasi', [AdminBerkasController::class, 'verifikasi'])->name('admin.berkas.verifikasi');
+// });
+Route::get('/pengajuan/verifikasi', [AdminPengajuanController::class, 'verifikasiIndex'])->name('admin.pengajuan.verifikasi.index');
+Route::get('/pengajuan/{id}/verifikasi-berkas', [AdminPengajuanController::class, 'verifikasiForm'])->name('admin.pengajuan.verifikasi.form');
+Route::post('/pengajuan/{id}/verifikasi-berkas', [AdminPengajuanController::class, 'verifikasiBerkas'])->name('admin.pengajuan.verifikasi.submit');
+
+
+
 
 require __DIR__.'/auth.php';

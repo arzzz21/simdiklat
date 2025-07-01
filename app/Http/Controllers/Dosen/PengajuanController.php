@@ -39,6 +39,7 @@ class PengajuanController extends Controller
         // Simpan pengajuan
         $pengajuan = Pengajuan::create([
             'user_id' => auth()->id(), // atau dari relasi dosen
+            'program_studi' => $request->program_studi,
             'jenis_program_id' => $request->jenis_program_id,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
@@ -68,6 +69,9 @@ class PengajuanController extends Controller
             'mahasiswa_ids.*' => 'exists:mahasiswas,id',
         ]);
         $pengajuan = Pengajuan::findOrFail($id);
+        if ($pengajuan->status === 'diterima') {
+            abort(403, 'Pengajuan yang telah diterima tidak bisa diedit.');
+        }
         $pengajuan->update([
             'jenis_program_id' => $request->jenis_program_id,
             'program_studi' => $request->program_studi,

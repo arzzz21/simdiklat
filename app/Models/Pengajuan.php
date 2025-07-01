@@ -41,4 +41,9 @@ class Pengajuan extends Model
     {
         return $this->belongsTo(User::class, 'diverifikasi_oleh');
     }
+
+    public function berkas()
+    {
+        return $this->hasMany(BerkasPengajuan::class);
+    }
 }

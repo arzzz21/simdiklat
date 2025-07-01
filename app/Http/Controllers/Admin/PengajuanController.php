@@ -30,5 +30,44 @@ class PengajuanController extends Controller
 
         return redirect()->route('admin.pengajuan.index')->with('success', 'Pengajuan telah diverifikasi.');
     }
+    public function verifikasiIndex()
+    {
+        // $pengajuans = Pengajuan::with('user', 'jenisProgram')
+        //     ->where('status', 'diterima')
+        //     ->latest()->get();
 
+        // return view('admin.pengajuan.verifikasi_index', compact('pengajuans'));
+
+        $belumDiverifikasi = Pengajuan::with('user', 'jenisProgram')
+            ->where('status', 'diterima')
+            ->latest()
+            ->get();
+        $sudahDiverifikasi = Pengajuan::with('user', 'jenisProgram')
+            ->whereIn('status', ['terverifikasi', 'berkas_tidak_sesuai'])
+            ->latest()
+            ->get();
+
+        return view('admin.pengajuan.verifikasi_index', compact('belumDiverifikasi', 'sudahDiverifikasi'));
+    }
+
+    public function verifikasiForm($id)
+    {
+        $pengajuan = Pengajuan::with('user', 'jenisProgram', 'berkas')->findOrFail($id);
+        return view('admin.pengajuan.verifikasi_form', compact('pengajuan'));
+    }
+
+    public function verifikasiBerkas(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:terverifikasi,berkas_tidak_sesuai',
+            'catatan_berkas' => 'nullable|string',
+        ]);
+
+        $pengajuan = Pengajuan::findOrFail($id);
+        $pengajuan->status = $request->status;
+        $pengajuan->catatan_berkas = $request->catatan_berkas;
+        $pengajuan->save();
+
+        return redirect()->route('admin.pengajuan.verifikasi.index')->with('success', 'Pengajuan berhasil diverifikasi.');
+    }
 }

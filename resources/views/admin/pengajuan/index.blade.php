@@ -35,8 +35,10 @@
               <span class="badge bg-warning">Diajukan</span>
             @elseif($p->status == 'diterima')
               <span class="badge bg-success">Diterima</span>
-            @else
+            @elseif($p->status == 'ditolak')
               <span class="badge bg-danger">Ditolak</span>
+            @else
+              <span class="badge bg-primary">{{ $p->status }}</span>
             @endif
           </td>
           <td>
@@ -55,7 +57,11 @@
               <em>Terverifikasi</em>
             @endif --}}
             <!-- Tombol -->
-            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalVerif{{ $p->id }}">Verifikasi</button>
+            @if ($p->status === 'diajukan')
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalVerif{{ $p->id }}">Verifikasi</button>
+            @else
+                <button class="btn btn-sm btn-secondary" disabled>Verifikasi</button>
+            @endif
 
             <!-- Modal -->
             <div class="modal fade" id="modalVerif{{ $p->id }}" tabindex="-1">
@@ -95,11 +101,15 @@
                 <span class="badge bg-success">Diterima</span><br>
                 <small>Oleh: {{ $p->verifikator->name ?? '-' }}</small><br>
                 <small>{{ $p->tanggal_verifikasi ? \Carbon\Carbon::parse($p->tanggal_verifikasi)->format('d-m-Y H:i') : '-' }}</small>
-            @else
+            @elseif($p->status == 'ditolak')
                 <span class="badge bg-danger">Ditolak</span><br>
                 <small>Oleh: {{ $p->verifikator->name ?? '-' }}</small><br>
                 <small>{{ $p->tanggal_verifikasi ? \Carbon\Carbon::parse($p->tanggal_verifikasi)->format('d-m-Y H:i') : '-' }}</small><br>
                 <small><strong>Alasan:</strong> {{ $p->alasan_ditolak }}</small>
+            @else
+                <span class="badge bg-primary">{{ $p->status }}</span><br>
+                <small>Oleh: {{ $p->verifikator->name ?? '-' }}</small><br>
+                <small>{{ $p->tanggal_verifikasi ? \Carbon\Carbon::parse($p->tanggal_verifikasi)->format('d-m-Y H:i') : '-' }}</small>
             @endif
           </td>
         </tr>
