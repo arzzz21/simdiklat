@@ -43,12 +43,21 @@
 
                 {{-- Pengajuan --}}
                 @role('dosen')
-                    <li class="menu-title">Pengajuan</li>
+                    <li class="menu-title">Manajemen</li>
                     <li>
                         <a href="{{ route('dosen.pengajuan.index') }}" class="waves-effect">
                             <i class="bx bx-send"></i>
                             <span>Pengajuan</span>
                         </a>
+                    </li>
+                @endrole
+                @role('admin')
+                    <li class="menu-title">Manajemen</li>
+
+                    <li class="{{ request()->routeIs('admin.pengajuan.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.pengajuan.index') }}">
+                        <i class="mdi mdi-clipboard-list"></i> <span>Pengajuan Masuk</span>
+                    </a>
                     </li>
                 @endrole
             </ul>

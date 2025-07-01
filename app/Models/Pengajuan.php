@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Pengajuan extends Model
 {
@@ -15,6 +16,12 @@ class Pengajuan extends Model
         'status',
         'keterangan_admin',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function dosen()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -30,4 +37,8 @@ class Pengajuan extends Model
         return $this->belongsToMany(Mahasiswa::class, 'pengajuan_mahasiswa');
     }
 
+    public function verifikator()
+    {
+        return $this->belongsTo(User::class, 'diverifikasi_oleh');
+    }
 }

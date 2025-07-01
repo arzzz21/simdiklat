@@ -6,7 +6,9 @@ use App\Http\Controllers\KampusController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\JenisProgramController;
 use App\Http\Controllers\Admin\DosenController;
-use App\Http\Controllers\Dosen\PengajuanController;
+use App\Http\Controllers\Admin\PengajuanController as AdminPengajuanController;
+use App\Http\Controllers\Dosen\PengajuanController as DosenPengajuanController;
+
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -47,7 +49,6 @@ Route::get('/redirect-after-login', function () {
 Route::resource('kampus', KampusController::class);
 Route::resource('mahasiswa', MahasiswaController::class);
 Route::resource('jenis-program', JenisProgramController::class);
-Route::resource('pengajuan', PengajuanController::class);
 
 //KAMPUS
 Route::middleware('auth')->group(function () {
@@ -72,8 +73,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 //Pengajuan PKL/Magang
 Route::middleware(['auth'])->prefix('dosen')->name('dosen.')->group(function () {
-    Route::resource('pengajuan', PengajuanController::class)->except('show');
+    Route::resource('pengajuan', DosenPengajuanController::class)->except('show');
 });
 
+//Verifikasi Pengajuan
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/pengajuan', [AdminPengajuanController::class, 'index'])->name('admin.pengajuan.index');
+    Route::post('/pengajuan/{id}/verifikasi', [AdminPengajuanController::class, 'verifikasi'])->name('admin.pengajuan.verifikasi');
+});
 
 require __DIR__.'/auth.php';
