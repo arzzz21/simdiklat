@@ -11,6 +11,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Dosen</th>
                     <th>Program</th>
                     <th>Periode</th>
@@ -20,6 +21,7 @@
             <tbody>
                 @forelse($belumDiverifikasi as $p)
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $p->user->name }}</td>
                     <td>{{ $p->jenisProgram->nama }}</td>
                     <td>{{ $p->tanggal_mulai }} - {{ $p->tanggal_selesai }}</td>
@@ -44,6 +46,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Dosen</th>
                     <th>Status</th>
                     <th>Catatan</th>
@@ -53,9 +56,14 @@
             <tbody>
                 @forelse($sudahDiverifikasi as $p)
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $p->user->name }}</td>
                     <td>
-                        @if($p->status == 'terverifikasi')
+                        @php
+                            $statusTerverifikasi = ['terverifikasi', 'invoice_diterbitkan', 'menunggu_verifikasi_pembayaran', 'selesai'];
+                        @endphp
+
+                        @if(in_array($p->status, $statusTerverifikasi))
                             <span class="badge bg-success">Terverifikasi</span>
                         @else
                             <span class="badge bg-danger">Berkas Tidak Sesuai</span>
@@ -70,7 +78,9 @@
                     </td>
                 </tr> @empty <tr>
                     <td colspan="4">Belum ada verifikasi.</td>
-                </tr> @endforelse </tbody>
+                </tr>
+                @endforelse
+            </tbody>
         </table>
     </div>
 </div>

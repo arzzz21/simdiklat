@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\PengajuanController as AdminPengajuanController;
 use App\Http\Controllers\Dosen\PengajuanController as DosenPengajuanController;
 use App\Http\Controllers\Admin\BerkasController as AdminBerkasController;
 use App\Http\Controllers\Dosen\BerkasController as DosenBerkasController;
+use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
+use App\Http\Controllers\Dosen\InvoiceController as DosenInvoiceController;
 
 
 // Route::get('/', function () {
@@ -98,6 +100,31 @@ Route::get('/pengajuan/verifikasi', [AdminPengajuanController::class, 'verifikas
 Route::get('/pengajuan/{id}/verifikasi-berkas', [AdminPengajuanController::class, 'verifikasiForm'])->name('admin.pengajuan.verifikasi.form');
 Route::post('/pengajuan/{id}/verifikasi-berkas', [AdminPengajuanController::class, 'verifikasiBerkas'])->name('admin.pengajuan.verifikasi.submit');
 
+//Penerbitan Invoice
+Route::get('/admin/invoice/create/{pengajuan}', [AdminInvoiceController::class, 'create'])->name('admin.invoice.create');
+Route::post('/admin/invoice/store/{pengajuan}', [AdminInvoiceController::class, 'store'])->name('admin.invoice.store');
+
+//Melihat Invoice dan Upload Buti Bayar
+Route::get('/dosen/invoice/{pengajuan}', [DosenInvoiceController::class, 'show'])->name('dosen.invoice.show');
+Route::post('/dosen/invoice/{pengajuan}/upload', [DosenInvoiceController::class, 'uploadBukti'])->name('dosen.invoice.upload');
+    //PDF Invoice
+    Route::prefix('dosen')->middleware(['auth'])->group(function () {
+        Route::get('/dosen/invoice/{id}/cetak', [DosenInvoiceController::class, 'cetakPDF'])->name('dosen.invoice.cetak');
+    });
+
+
+// // Daftar invoice menunggu verifikasi
+// Route::get('/admin/invoice/verifikasi', [AdminInvoiceController::class, 'verifikasiIndex'])->name('admin.invoice.verifikasi.index');
+// // Halaman detail untuk verifikasi
+// Route::get('/admin/invoice/{invoice}/verifikasi', [AdminInvoiceController::class, 'verifikasiShow'])->name('admin.invoice.verifikasi.show');
+// // Aksi simpan hasil verifikasi
+// Route::post('/admin/invoice/{invoice}/verifikasi', [AdminInvoiceController::class, 'verifikasiStore'])->name('admin.invoice.verifikasi.store');
+
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/invoice/verifikasi', [AdminInvoiceController::class, 'verifikasiIndex'])->name('admin.invoice.verifikasi.index');
+    Route::get('/invoice/verifikasi/{id}', [AdminInvoiceController::class, 'verifikasiShow'])->name('admin.invoice.verifikasi.show');
+    Route::post('/invoice/verifikasi/{id}', [AdminInvoiceController::class, 'verifikasiSimpan'])->name('admin.invoice.verifikasi.store');
+});
 
 
 

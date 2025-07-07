@@ -46,4 +46,11 @@ class Pengajuan extends Model
     {
         return $this->hasMany(BerkasPengajuan::class);
     }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
+
 }

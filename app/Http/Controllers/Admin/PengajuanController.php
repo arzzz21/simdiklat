@@ -10,7 +10,7 @@ class PengajuanController extends Controller
 {
     public function index()
     {
-        $pengajuans = Pengajuan::with('user', 'jenisProgram')->orderBy('created_at', 'desc')->get();
+        $pengajuans = Pengajuan::with('user', 'jenisProgram', 'invoice')->orderBy('created_at', 'desc')->get();
         return view('admin.pengajuan.index', compact('pengajuans'));
     }
 
@@ -43,7 +43,7 @@ class PengajuanController extends Controller
             ->latest()
             ->get();
         $sudahDiverifikasi = Pengajuan::with('user', 'jenisProgram')
-            ->whereIn('status', ['terverifikasi', 'berkas_tidak_sesuai'])
+            ->whereIn('status', ['terverifikasi', 'invoice_diterbitkan', 'menunggu_verifikasi_pembayaran', 'selesai', 'berkas_tidak_sesuai'])
             ->latest()
             ->get();
 
@@ -59,7 +59,7 @@ class PengajuanController extends Controller
     public function verifikasiBerkas(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:terverifikasi,berkas_tidak_sesuai',
+            'status' => 'required|in:terverifikasi,invoice_diterbitkan,menunggu_verifikasi_pembayaran,selesai,berkas_tidak_sesuai',
             'catatan_berkas' => 'nullable|string',
         ]);
 

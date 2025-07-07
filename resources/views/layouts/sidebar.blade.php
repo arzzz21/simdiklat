@@ -73,6 +73,11 @@
                             <span>Verifikasi Berkas</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.invoice.verifikasi.index') }}">
+                            <i class="mdi mdi-credit-card"></i> Verifikasi Pembayaran
+                        </a>
+                    </li>
                 @endrole
             </ul>
         </div>
