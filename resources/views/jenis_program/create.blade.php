@@ -16,6 +16,7 @@
                         <label>Metode Biaya</label>
                         <select name="metode_biaya" class="form-control">
                             <option value="per_bulan">Per Bulan</option>
+                            <option value="per_minggu">Per Minggu</option>
                             <option value="flat">Flat</option>
                         </select>
                     </div>

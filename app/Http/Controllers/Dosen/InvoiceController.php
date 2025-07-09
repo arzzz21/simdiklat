@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Dosen;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class InvoiceController extends Controller
 {
@@ -45,11 +47,38 @@ class InvoiceController extends Controller
     }
     public function cetakPDF($id)
     {
-        $invoice = \App\Models\Invoice::with('pengajuan.jenisProgram', 'pengajuan.user')->findOrFail($id);
+        $invoice = \App\Models\Invoice::with('pengajuan.jenisProgram', 'pengajuan.user', 'pengajuan.mahasiswas')->findOrFail($id);
 
         $pdf = Pdf::loadView('dosen.invoice.cetak', compact('invoice'))->setPaper('A4');
 
         return $pdf->stream('invoice-'.$invoice->id.'.pdf');
         // Bisa pakai ->download(...) kalau ingin langsung download
+    }
+    public function cetakKuitansi($id)
+    {
+        $pengajuan = Pengajuan::with(['invoice', 'user', 'jenisProgram', 'mahasiswas', 'verifikator'])
+                    ->findOrFail($id);
+
+        if (!$pengajuan->invoice) {
+            abort(404, 'Invoice tidak ditemukan untuk pengajuan ini.');
+        }
+
+        $petugas = $pengajuan->verifikator->name ?? '-';
+        $tanggal = $pengajuan->tanggal_verifikasi
+            ? \Carbon\Carbon::parse($pengajuan->tanggal_verifikasi)->format('d-m-Y H:i')
+            : '-';
+        $isiQR = "Verifikasi oleh: $petugas pada $tanggal";
+
+        // Generate QR Code SVG base64
+        $qrSvg = QrCode::format('svg')->size(200)->generate($isiQR);
+        $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
+
+        $pdf = Pdf::loadView('dosen.invoice.kuitansi_pdf', [
+            'pengajuan' => $pengajuan,
+            // 'invoice' => $pengajuan->invoice,
+            'qrBase64' => $qrBase64,
+        ])->setPaper('A4');
+
+        return $pdf->stream('kuitansi-'.$pengajuan->id.'.pdf');
     }
 }

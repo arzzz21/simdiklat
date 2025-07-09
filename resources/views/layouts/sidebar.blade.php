@@ -75,7 +75,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.invoice.verifikasi.index') }}">
-                            <i class="mdi mdi-credit-card"></i> Verifikasi Pembayaran
+                            <i class="mdi mdi-credit-card"></i> <span>Verifikasi Pembayaran</span>
                         </a>
                     </li>
                 @endrole

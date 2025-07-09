@@ -26,6 +26,10 @@ class PengajuanController extends Controller
         $pengajuan->diverifikasi_oleh = auth()->id();
         $pengajuan->tanggal_verifikasi = now();
         $pengajuan->alasan_ditolak = $request->status == 'ditolak' ? $request->alasan : null;
+        $pengajuan->unit_magang = $request->status == 'diterima' ? $request->unit_magang : null;
+        $pengajuan->pembimbing_rumah_sakit = $request->status == 'diterima' ? $request->pembimbing_rumah_sakit : null;
+        $pengajuan->nip_pembimbing = $request->status == 'diterima' ? $request->nip_pembimbing : null;
+        $pengajuan->jabatan_pembimbing = $request->status == 'diterima' ? $request->jabatan_pembimbing : null;
         $pengajuan->save();
 
         return redirect()->route('admin.pengajuan.index')->with('success', 'Pengajuan telah diverifikasi.');

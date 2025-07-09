@@ -105,26 +105,22 @@ Route::get('/admin/invoice/create/{pengajuan}', [AdminInvoiceController::class, 
 Route::post('/admin/invoice/store/{pengajuan}', [AdminInvoiceController::class, 'store'])->name('admin.invoice.store');
 
 //Melihat Invoice dan Upload Buti Bayar
-Route::get('/dosen/invoice/{pengajuan}', [DosenInvoiceController::class, 'show'])->name('dosen.invoice.show');
+// Route::get('/dosen/invoice/{pengajuan}', [DosenInvoiceController::class, 'show'])->name('dosen.invoice.show');
 Route::post('/dosen/invoice/{pengajuan}/upload', [DosenInvoiceController::class, 'uploadBukti'])->name('dosen.invoice.upload');
     //PDF Invoice
     Route::prefix('dosen')->middleware(['auth'])->group(function () {
         Route::get('/dosen/invoice/{id}/cetak', [DosenInvoiceController::class, 'cetakPDF'])->name('dosen.invoice.cetak');
     });
 
-
-// // Daftar invoice menunggu verifikasi
-// Route::get('/admin/invoice/verifikasi', [AdminInvoiceController::class, 'verifikasiIndex'])->name('admin.invoice.verifikasi.index');
-// // Halaman detail untuk verifikasi
-// Route::get('/admin/invoice/{invoice}/verifikasi', [AdminInvoiceController::class, 'verifikasiShow'])->name('admin.invoice.verifikasi.show');
-// // Aksi simpan hasil verifikasi
-// Route::post('/admin/invoice/{invoice}/verifikasi', [AdminInvoiceController::class, 'verifikasiStore'])->name('admin.invoice.verifikasi.store');
-
+// Daftar invoice menunggu verifikasi
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/invoice/verifikasi', [AdminInvoiceController::class, 'verifikasiIndex'])->name('admin.invoice.verifikasi.index');
     Route::get('/invoice/verifikasi/{id}', [AdminInvoiceController::class, 'verifikasiShow'])->name('admin.invoice.verifikasi.show');
     Route::post('/invoice/verifikasi/{id}', [AdminInvoiceController::class, 'verifikasiSimpan'])->name('admin.invoice.verifikasi.store');
 });
+
+// Cetak Kuitansi
+Route::get('/pengajuan/{id}/kuitansi', [DosenInvoiceController::class, 'cetakKuitansi'])->name('dosen.kuitansi.cetak');
 
 
 

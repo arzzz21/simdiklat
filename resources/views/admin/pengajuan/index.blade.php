@@ -44,20 +44,6 @@
             @endif
           </td>
           <td>
-            {{-- @if($p->status == 'diajukan')
-              <form action="{{ route('admin.pengajuan.verifikasi', $p->id) }}" method="POST" class="d-inline">
-                @csrf
-                <input type="hidden" name="status" value="diterima">
-                <button type="submit" class="btn btn-success btn-sm">Terima</button>
-              </form>
-              <form action="{{ route('admin.pengajuan.verifikasi', $p->id) }}" method="POST" class="d-inline">
-                @csrf
-                <input type="hidden" name="status" value="ditolak">
-                <button type="submit" class="btn btn-danger btn-sm">Tolak</button>
-              </form>
-            @else
-              <em>Terverifikasi</em>
-            @endif --}}
             <!-- Tombol -->
             @if ($p->status === 'diajukan')
                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalVerif{{ $p->id }}">Verifikasi</button>
@@ -68,7 +54,7 @@
             <!-- Modal -->
             <div class="modal fade" id="modalVerif{{ $p->id }}" tabindex="-1">
             <div class="modal-dialog">
-                <form action="{{ route('admin.pengajuan.verifikasi', $p->id) }}" method="POST" class="modal-content">
+                <form id="form-verifikasi-{{ $p->id }}" action="{{ route('admin.pengajuan.verifikasi', $p->id) }}" method="POST" class="modal-content">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title">Verifikasi Pengajuan</h5>
@@ -77,15 +63,34 @@
                 <div class="modal-body">
                     <p>Apakah Anda ingin menerima atau menolak pengajuan ini?</p>
                     <div class="mb-2">
-                    <select name="status" class="form-select" required>
+                    <select name="status" class="form-select status-select" data-id="{{ $p->id }}" required>
                         <option value="">-- Pilih Status --</option>
                         <option value="diterima">Diterima</option>
                         <option value="ditolak">Ditolak</option>
                     </select>
                     </div>
-                    <div class="mb-2">
-                    <label>Alasan Penolakan (jika ditolak)</label>
-                    <textarea name="alasan" class="form-control" rows="3"></textarea>
+                    <div class="mb-2 form-ditolak form-ditolak-{{ $p->id }}" style="display: none;">
+                        <label>Alasan Penolakan (jika ditolak)</label>
+                        <textarea name="alasan" class="form-control" rows="3"></textarea>
+                    </div>
+                    {{-- Diterima --}}
+                    <div class="form-diterima form-diterima-{{ $p->id }}" style="display: none;">
+                        <div class="mb-2">
+                            <label>Unit Magang</label>
+                            <input type="text" name="unit_magang" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label>Nama Pembimbing RS</label>
+                            <input type="text" name="pembimbing_rumah_sakit" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label>NIP Pembimbing</label>
+                            <input type="text" name="nip_pembimbing" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label>Jabatan Pembimbing</label>
+                            <input type="text" name="jabatan_pembimbing" class="form-control">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -151,4 +156,39 @@
     </table>
   </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const selects = document.querySelectorAll(".status-select");
+
+    selects.forEach(select => {
+        const id = select.dataset.id;
+        const formDiterima = document.querySelector(".form-diterima-" + id);
+        const formDitolak = document.querySelector(".form-ditolak-" + id);
+
+        // Pastikan saat pertama dibuka sesuai value saat ini
+        toggleForm(select.value, formDiterima, formDitolak);
+
+        select.addEventListener("change", function () {
+            toggleForm(this.value, formDiterima, formDitolak);
+        });
+    });
+
+    function toggleForm(value, formDiterima, formDitolak) {
+        if (value === "diterima") {
+            formDiterima.style.display = "block";
+            formDitolak.style.display = "none";
+        } else if (value === "ditolak") {
+            formDiterima.style.display = "none";
+            formDitolak.style.display = "block";
+        } else {
+            formDiterima.style.display = "none";
+            formDitolak.style.display = "none";
+        }
+    }
+});
+</script>
+
+
+
 @endsection
