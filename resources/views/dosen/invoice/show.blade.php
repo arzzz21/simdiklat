@@ -12,8 +12,8 @@
   </div>
   <div class="card-body">
     <p><strong>Nama Program:</strong> {{ $pengajuan->jenisProgram->nama }}</p>
-    <p><strong>Lama:</strong> {{ $pengajuan->invoice->jumlah_bulan }} bulan</p>
-    <p><strong>Biaya per Bulan:</strong> Rp{{ number_format($pengajuan->invoice->biaya_per_bulan) }}</p>
+    <p><strong>Lama:</strong> {{ $pengajuan->invoice->lama_magang }} </p>
+    <p><strong>Biaya :</strong> Rp{{ number_format($pengajuan->invoice->biaya_per_lama) }}</p>
     <p><strong>Total Tagihan:</strong> Rp{{ number_format($pengajuan->invoice->total) }}</p>
     <p><strong>Status Pembayaran:</strong>
         <span class="badge bg-{{ $pengajuan->invoice->status == 'lunas' ? 'success' : ($pengajuan->invoice->status == 'menunggu_verifikasi' ? 'warning' : 'secondary') }}">

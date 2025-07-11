@@ -2,104 +2,131 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Kuitansi Pembayaran</title>
+    <title>Kwitansi Pembayaran</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 12px;
         }
+
         .container {
-            width: 90%;
-            margin: 0 auto;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .kuitansi-box {
+            width: 95%;
+            margin: auto;
             border: 1px solid #000;
-            padding: 20px;
+            padding: 15px 20px;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header {
+            text-align: left;
+        }
+
+        .header h2,
+        .header h3,
+        .header h4,
+        .header h5 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .green-text {
+            color: #008000;
+        }
+
+        .green-line {
+            border-top: 3px solid green;
+            margin: 5px 0 10px 0;
+        }
+
+        table.meta {
+            width: 100%;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        table.meta td {
+            padding: 4px;
+            vertical-align: top;
+        }
+
+        .rupiah-box {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .rupiah-box span {
+            border: 1px solid #000;
+            padding: 5px 5px;
+        }
+
         .ttd {
-            margin-top: 50px;
+            margin-top: 10px;
             text-align: right;
         }
-        table.detail {
-            width: 100%;
-            margin-top: 20px;
-        }
-        table.detail td {
-            vertical-align: top;
-            padding: 4px 0;
-        }
-        .border {
-            border: 1px solid black;
-            padding: 10px;
-        }
-        .footer {
-            font-size: 12px;
-            margin-top: 30px;
-            text-align: center;
-            color: #555;
+
+        .qr {
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h3 class="text-center">KUITANSI PEMBAYARAN</h3>
+        <table>
+            <tr>
+                <td class="header">
+                    <h3 class="green-text" style="font-family: 'Times New Roman', Times, serif">PIMPINAN DAERAH MUHAMMADIYAH SUKOHARJO</h3>
+                    <h2 class="green-text" style="font-family: 'Times New Roman', Times, serif">RUMAH SAKIT PKU MUHAMMADIYAH SUKOHARJO</h2>
+                    <h5 class="green-text">Jl. Mayor Sunaryo No. 37, Sukoharjo 57512 | Telp. (0271) 593979 | Fax. (0271) 599158</h5>
+                    <h5 class="green-text">Email: pkusukoharjo@gmail.com | Website: www.pkusukoharjo.com</h5>
+                <td class="text-right">
+                    <h2 class="green-text">KWITANSI</h2>
+                </td>
+            </tr>
+        </table>
 
-        <div class="kuitansi-box">
-            <p>Sudah terima dari:</p>
-            <p><strong>{{ $pengajuan->user->name }}</strong> (Dosen Pembimbing)</p>
+        <div class="green-line"></div>
 
-            <p>Uang sejumlah:</p>
-            <p><strong>Rp. {{ number_format($pengajuan->invoice->total, 0, ',', '.') }}</strong></p>
+        <table class="meta">
+            <tr>
+                <td>Telah Terima Dari</td>
+                <td>:</td>
+                <td> {{ $pengajuan->user->kampus->nama ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td>Uang Sejumlah</td>
+                <td>:</td>
+                <td> {{ \Illuminate\Support\Str::title(\Riskihajar\Terbilang\Facades\Terbilang::make($pengajuan->invoice->total, ' rupiah')) }}</td>
+            </tr>
+            <tr>
+                <td>Untuk Pembayaran</td>
+                <td>:</td>
+                <td> {{ $pengajuan->invoice ? 'INV/' . $pengajuan->invoice->id . '/' . now()->year : '-' }}<br>
+                    {{ $pengajuan->jenisProgram->nama ? 'Permohonan ' . $pengajuan->jenisProgram->nama . ' ' . $pengajuan->program_studi : '' }}<br>
+                    Periode {{ \Carbon\Carbon::parse($pengajuan->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }}
+                    s/d {{ \Carbon\Carbon::parse($pengajuan->tanggal_selesai)->locale('id')->translatedFormat('d F Y') }}
+                </td>
+            </tr>
+        </table>
 
-            <p>Untuk pembayaran program:</p>
-            <p><strong>{{ strtoupper($pengajuan->jenisProgram->nama) }}</strong></p>
-
-            <table class="detail">
-                <tr>
-                    <td width="30%">Program Studi</td>
-                    <td>: {{ $pengajuan->program_studi }}</td>
-                </tr>
-                <tr>
-                    <td>Rentang Waktu</td>
-                    <td>: {{ \Carbon\Carbon::parse($pengajuan->tanggal_mulai)->format('d-m-Y') }} s/d {{ \Carbon\Carbon::parse($pengajuan->tanggal_selesai)->format('d-m-Y') }}</td>
-                </tr>
-                <tr>
-                    <td>Unit Magang</td>
-                    <td>: {{ $pengajuan->unit_magang ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td>Jumlah Mahasiswa</td>
-                    <td>: {{ $pengajuan->mahasiswas->count() }} orang</td>
-                </tr>
-                <tr>
-                    <td>Metode Biaya</td>
-                    <td>: {{ ucfirst(str_replace('_', ' ', $pengajuan->jenisProgram->metode_biaya)) }}</td>
-                </tr>
-                <tr>
-                    <td>Nominal per {{ $pengajuan->jenisProgram->metode_biaya == 'per_bulan' ? 'Bulan' : ($pengajuan->jenisProgram->metode_biaya == 'per_minggu' ? 'Minggu' : 'Program') }}</td>
-                    <td>: Rp. {{ number_format($pengajuan->jenisProgram->biaya, 0, ',', '.') }}</td>
-                </tr>
-            </table>
-
-            <div class="ttd" style="align : center">
-                <p>Dicetak pada: {{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}</p>
-                <p>Petugas</p>
-                <img src="{{ $qrBase64 }}" width="80" alt="QR Code">
-                <p>{{ $pengajuan->verifikator->name ?? '-' }}</p>
-            </div>
-            <hr style="margin: 10px 0;">
-            <small><strong>Verifikasi:</strong></small><br>
-            <small>Oleh: {{ $pengajuan->verifikator->name ?? '-' }}</small><br>
-            <small>Tanggal: {{ \Carbon\Carbon::parse($pengajuan->tanggal_verifikasi)->format('d-m-Y H:i') }}</small>
-
+        <div class="rupiah-box">
+            <span>Rp. {{ number_format($pengajuan->invoice->total, 0, ',', '.') }}</span>
         </div>
 
-        <div class="footer">
-            Kuitansi ini dicetak dari sistem informasi Diklat RS — tidak perlu tanda tangan basah.
+        <div class="ttd">
+            <p>Sukoharjo, {{ \Carbon\Carbon::parse($pengajuan->tanggal_verifikasi)->locale('id')->translatedFormat('d F Y') }}</p>
+            @if(!empty($qrBase64))
+                <div class="qr">
+                    <img src="{{ $qrBase64 }}" width="80" alt="QR Code">
+                </div>
+            @endif
+            <p>({{ $pengajuan->verifikator->name ?? '................' }})</p>
         </div>
     </div>
 </body>

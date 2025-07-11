@@ -47,9 +47,9 @@ class InvoiceController extends Controller
     }
     public function cetakPDF($id)
     {
-        $invoice = \App\Models\Invoice::with('pengajuan.jenisProgram', 'pengajuan.user', 'pengajuan.mahasiswas')->findOrFail($id);
+        $invoice = \App\Models\Invoice::with('pengajuan.jenisProgram', 'pengajuan.user', 'pengajuan.mahasiswas', 'pengajuan.user.kampus')->findOrFail($id);
 
-        $pdf = Pdf::loadView('dosen.invoice.cetak', compact('invoice'))->setPaper('A4');
+        $pdf = Pdf::loadView('dosen.invoice.cetak', compact('invoice')) ->setPaper([0, 0, 419.95, 595.28], 'landscape');
 
         return $pdf->stream('invoice-'.$invoice->id.'.pdf');
         // Bisa pakai ->download(...) kalau ingin langsung download
@@ -77,7 +77,7 @@ class InvoiceController extends Controller
             'pengajuan' => $pengajuan,
             // 'invoice' => $pengajuan->invoice,
             'qrBase64' => $qrBase64,
-        ])->setPaper('A4');
+        ])->setPaper([0, 0, 595.28, 419.95], 'portrait');
 
         return $pdf->stream('kuitansi-'.$pengajuan->id.'.pdf');
     }

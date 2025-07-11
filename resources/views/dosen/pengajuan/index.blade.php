@@ -66,8 +66,8 @@
                             <div class="d-flex flex-wrap gap-1">
                             @if ($item->status === ['diajukan','ditolak'])
                                 <a href="{{ route('dosen.pengajuan.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                            @else
-                                <button class="btn btn-sm btn-secondary" disabled>Edit</button>
+                            {{-- @else
+                                <button class="btn btn-sm btn-secondary" disabled>Edit</button> --}}
                             @endif
 
                             @if ($item->status == 'diterima')
@@ -91,6 +91,17 @@
                             @endif
                             @if ($item->status === 'selesai')
                                 <a href="{{ route('dosen.kuitansi.cetak', $item->id) }}" class="btn btn-sm btn-success" target="_blank">Cetak Kuitansi</a>
+                            @endif
+                            @if (
+                                $item->status === 'selesai' &&
+                                \Carbon\Carbon::now()->gt(\Carbon\Carbon::parse($item->tanggal_selesai))
+                            )
+                                <a href="{{ route('dosen.pengajuan.surat', $item->id) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    📄 Cetak Surat
+                                </a>
+                                <a href="{{ route('dosen.pengajuan.sertifikat', $item->id) }}" target="_blank" class="btn btn-sm btn-outline-success">
+                                    📄 Cetak Sertifikat
+                                </a>
                             @endif
                             </div>
                         </td>
@@ -135,7 +146,12 @@
                                     <p><strong>Total:</strong> Rp{{ number_format($item->invoice->total, 0, ',', '.') }}</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <a href="{{ route('dosen.invoice.cetak', $item->invoice->id) }}" target="_blank" class="btn btn-success">🖨 Cetak PDF</a>
+                                    @if($item->status === 'invoice_diterbitkan' || $item->status === 'menunggu_verifikasi_pembayaran')
+                                        <a href="{{ route('dosen.invoice.show', $item->id) }}" class="btn btn-success">
+                                            💳 Upload Bukti Pembayaran
+                                        </a>
+                                    @endif
+                                    <a href="{{ route('dosen.invoice.cetak', $item->invoice->id) }}" target="_blank" class="btn btn-success">Cetak PDF</a>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                                 </div>
                             </div>

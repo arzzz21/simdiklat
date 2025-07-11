@@ -8,8 +8,8 @@ class invoice extends Model
 {
     protected $fillable = [
         'pengajuan_id',
-        'jumlah_bulan',
-        'biaya_per_bulan',
+        'lama_magang',
+        'biaya_per_lama',
         'total',
         'status',
         'bukti_pembayaran',

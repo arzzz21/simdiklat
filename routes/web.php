@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\BerkasController as AdminBerkasController;
 use App\Http\Controllers\Dosen\BerkasController as DosenBerkasController;
 use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
 use App\Http\Controllers\Dosen\InvoiceController as DosenInvoiceController;
+use App\Http\Controllers\Dosen\SuratController as DosenSuratController;
 
 
 // Route::get('/', function () {
@@ -105,7 +106,7 @@ Route::get('/admin/invoice/create/{pengajuan}', [AdminInvoiceController::class, 
 Route::post('/admin/invoice/store/{pengajuan}', [AdminInvoiceController::class, 'store'])->name('admin.invoice.store');
 
 //Melihat Invoice dan Upload Buti Bayar
-// Route::get('/dosen/invoice/{pengajuan}', [DosenInvoiceController::class, 'show'])->name('dosen.invoice.show');
+Route::get('/dosen/invoice/{pengajuan}', [DosenInvoiceController::class, 'show'])->name('dosen.invoice.show');
 Route::post('/dosen/invoice/{pengajuan}/upload', [DosenInvoiceController::class, 'uploadBukti'])->name('dosen.invoice.upload');
     //PDF Invoice
     Route::prefix('dosen')->middleware(['auth'])->group(function () {
@@ -122,6 +123,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 // Cetak Kuitansi
 Route::get('/pengajuan/{id}/kuitansi', [DosenInvoiceController::class, 'cetakKuitansi'])->name('dosen.kuitansi.cetak');
 
+//Cetak Surat Keterangan dan Sertif
+Route::get('/dosen/pengajuan/{pengajuan}/surat', [DosenSuratController::class, 'cetakSurat'])->name('dosen.pengajuan.surat');
+Route::get('/dosen/pengajuan/{pengajuan}/sertifikat', [DosenSuratController::class, 'cetakSertifikat'])->name('dosen.pengajuan.sertifikat');
 
 
 require __DIR__.'/auth.php';

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pengajuan_id')->constrained()->onDelete('cascade');
-            $table->integer('jumlah_bulan');
-            $table->decimal('biaya_per_bulan', 12, 2);
+            $table->integer('lama_magang');
+            $table->decimal('biaya_per_lama', 12, 2);
             $table->decimal('total', 12, 2);
             $table->string('status')->default('menunggu_pembayaran'); // atau lunas, ditolak
             $table->timestamps();
