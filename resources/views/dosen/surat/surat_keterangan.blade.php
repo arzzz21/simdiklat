@@ -103,7 +103,7 @@
         <tr>
             <td width="150">Nama Pembimbing</td>
             <td>:</td>
-            <td>{{ $pengajuan->user->name }}</td>
+            <td>{{ $pengajuan->pembimbing_rumah_sakit }}</td>
         </tr>
         <tr>
             <td>Program</td>

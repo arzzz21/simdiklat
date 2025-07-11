@@ -16,7 +16,13 @@ class SuratController extends Controller
             abort(403, 'Surat belum dapat diterbitkan karena magang belum selesai.');
         }
 
-        $pdf = PDF::loadView('dosen.surat.surat_keterangan', compact('pengajuan'))->setPaper('A4');
+        $pdf = PDF::loadView('dosen.surat.surat_keterangan', compact('pengajuan'))
+            ->setPaper([0, 0, 609.45, 935.43], 'portrait') // 215mm x 330mm dalam point
+            ->setOptions([
+                'margin-top'    => 28.35,   // 1 cm = 28.35 point
+                'margin-bottom' => 70.88,   // 2.5 cm = 70.88 point
+                // kamu bisa tambah margin kiri/kanan jika perlu
+            ]);
 
         return $pdf->stream('Surat-Keterangan-'.$pengajuan->id.'.pdf');
     }
