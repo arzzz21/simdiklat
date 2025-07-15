@@ -127,5 +127,8 @@ Route::get('/pengajuan/{id}/kuitansi', [DosenInvoiceController::class, 'cetakKui
 Route::get('/dosen/pengajuan/{pengajuan}/surat', [DosenSuratController::class, 'cetakSurat'])->name('dosen.pengajuan.surat');
 Route::get('/dosen/pengajuan/{pengajuan}/sertifikat', [DosenSuratController::class, 'cetakSertifikat'])->name('dosen.pengajuan.sertifikat');
 
+//Download Sertifikat
+Route::get('/dosen/pengajuan/{pengajuan}/sertifikat/download', [SertifikatController::class, 'downloadZip'])->name('dosen.sertifikat.download');
+
 
 require __DIR__.'/auth.php';

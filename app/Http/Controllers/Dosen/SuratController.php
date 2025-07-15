@@ -37,7 +37,10 @@ class SuratController extends Controller
             abort(403, 'Sertifikat belum dapat diterbitkan karena magang belum selesai.');
         }
 
-        $pdf = PDF::loadView('dosen.surat.sertifikat', compact('pengajuan'))->setPaper('A4', 'landscape');
+        // $pdf = PDF::loadView('dosen.surat.sertifikat', compact('pengajuan'))->setPaper('A4', 'landscape');
+
+        $pdf = Pdf::loadView('dosen.sertifikat.template', compact('pengajuan'))->setPaper([0, 0, 609.45, 935.43], 'landscape');
+
 
         return $pdf->stream('Sertifikat-'.$pengajuan->id.'.pdf');
     }
