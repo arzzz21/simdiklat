@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use App\Models\Pengajuan;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class SuratController extends Controller
 {
@@ -16,13 +17,16 @@ class SuratController extends Controller
             abort(403, 'Surat belum dapat diterbitkan karena magang belum selesai.');
         }
 
-        $pdf = PDF::loadView('dosen.surat.surat_keterangan', compact('pengajuan'))
-            ->setPaper([0, 0, 609.45, 935.43], 'portrait') // 215mm x 330mm dalam point
-            ->setOptions([
-                'margin-top'    => 28.35,   // 1 cm = 28.35 point
-                'margin-bottom' => 70.88,   // 2.5 cm = 70.88 point
-                // kamu bisa tambah margin kiri/kanan jika perlu
-            ]);
+        $isiQR = "Surat ini ditandatangani oleh: dr. Indarto, M.Si., M.M selaku Direktur Utama RS PKU Muhammadiyah Sukoharjo pada $pengajuan->tanggal_selesai";
+
+        // Buat SVG base64 agar aman dipakai di PDF
+        $qrSvg = QrCode::format('svg')->size(120)->generate($isiQR);
+        $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
+
+        $pdf = PDF::loadView('dosen.surat.surat_keterangan', [
+            'pengajuan' => $pengajuan,
+            'qrBase64' => $qrBase64,
+        ])->setPaper([0, 0, 609.45, 935.43], 'portrait'); // 215mm x 330mm dalam point
 
         return $pdf->stream('Surat-Keterangan-'.$pengajuan->id.'.pdf');
     }
