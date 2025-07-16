@@ -13,6 +13,13 @@ use App\Http\Controllers\Dosen\BerkasController as DosenBerkasController;
 use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
 use App\Http\Controllers\Dosen\InvoiceController as DosenInvoiceController;
 use App\Http\Controllers\Dosen\SuratController as DosenSuratController;
+use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\JabatanController;
+use App\Http\Controllers\Admin\PegawaiController;
+use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
+use App\Http\Controllers\Admin\PegawaiUserController;
+use App\Http\Controllers\Admin\PelatihanController as AdminPelatihanController;
+use App\Http\Controllers\Pegawai\PelatihanController as PegawaiPelatihanController;
 
 
 // Route::get('/', function () {
@@ -41,13 +48,15 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/admin', fn () => view('admin.dashboard'));
     Route::get('/dosen', fn () => view('dosen.dashboard'));
+    Route::get('/pegawai', [\App\Http\Controllers\Pegawai\DashboardController::class, 'index'])->name('pegawai.dashboard');
 });
 
 Route::get('/redirect-after-login', function () {
     $user = auth()->user();
     return $user->hasRole('admin') ? redirect('/admin') :
            ($user->hasRole('dosen') ? redirect('/dosen') :
-           abort(403));
+           ($user->hasRole('pegawai') ? redirect('/pegawai') :
+           abort(403)));
 });
 
 //RESOURCE ROUTE
@@ -69,9 +78,6 @@ Route::middleware('auth')->group(function () {
 });
 
 //TAMBAH DOSEN
-// Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-//     Route::resource('dosen', DosenController::class)->except('show');
-// });
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('dosen', DosenController::class)->except('show');
 });
@@ -93,10 +99,6 @@ Route::post('/pengajuan/{id}/berkas', [DosenBerkasController::class, 'store'])->
 Route::delete('/berkas/{id}', [DosenBerkasController::class, 'destroy'])->name('dosen.pengajuan.berkas.destroy');
 
 //Verifikasi Berkas
-// Route::prefix('admin')->middleware(['auth'])->group(function () {
-// Route::get('/berkas', [AdminBerkasController::class, 'index'])->name('admin.berkas.index');
-// Route::post('/berkas/{id}/verifikasi', [AdminBerkasController::class, 'verifikasi'])->name('admin.berkas.verifikasi');
-// });
 Route::get('/pengajuan/verifikasi', [AdminPengajuanController::class, 'verifikasiIndex'])->name('admin.pengajuan.verifikasi.index');
 Route::get('/pengajuan/{id}/verifikasi-berkas', [AdminPengajuanController::class, 'verifikasiForm'])->name('admin.pengajuan.verifikasi.form');
 Route::post('/pengajuan/{id}/verifikasi-berkas', [AdminPengajuanController::class, 'verifikasiBerkas'])->name('admin.pengajuan.verifikasi.submit');
@@ -129,6 +131,34 @@ Route::get('/dosen/pengajuan/{pengajuan}/sertifikat', [DosenSuratController::cla
 
 //Download Sertifikat
 Route::get('/dosen/pengajuan/{pengajuan}/sertifikat/download', [SertifikatController::class, 'downloadZip'])->name('dosen.sertifikat.download');
+
+//PELATIHAN LUAR
+    //CRUD MASTER
+    Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+        Route::resource('unit', UnitController::class);
+        Route::resource('jabatan', JabatanController::class);
+        Route::resource('pegawai', PegawaiController::class);
+        Route::resource('jabatan', JabatanController::class)->except(['show']);
+        Route::resource('pegawai', PegawaiController::class)->except(['show']);
+    });
+
+    //CREATE USER PEGAWAI
+    Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/buat-user-pegawai', [PegawaiUserController::class, 'create'])->name('pegawaiuser.create');
+        Route::post('/buat-user-pegawai', [PegawaiUserController::class, 'store'])->name('pegawaiuser.store');
+    });
+    Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+        Route::post('/pegawai/{pegawai}/buat-user', [PegawaiUserController::class, 'createUser'])->name('pegawaiuser.createUser');
+    });
+
+    //INPUT PELATIHAN
+    Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+        Route::resource('pelatihan', AdminPelatihanController::class);
+    });
+
+    //CETAK SURAT TUGAS
+    Route::get('/pegawai/pelatihan/{pelatihan}/surat-tugas', [PegawaiPelatihanController::class, 'cetakSuratTugas'])->name('pegawai.pelatihan.surat');
+
 
 
 require __DIR__.'/auth.php';
