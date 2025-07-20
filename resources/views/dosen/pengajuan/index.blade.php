@@ -17,28 +17,28 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Jenis</th>
-                    <th>Mahasiswa</th>
-                    <th>Tanggal</th>
+                    <th>Detail Program</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($pengajuans as $item)
-                    <tr class="table-clickable" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $item->id }}">
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->jenisProgram->nama }}</td>
-                        <td>
-                            <ul>
+                    <tr>
+                        <td class="detail-td" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $item->id }}">
+                            {{ $loop->iteration }}
+                        </td>
+                        <td class="detail-td" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $item->id }}">
+                            <strong>{{ $item->jenisProgram->nama }}</strong><br>
+                            <ul class="mb-1">
                                 @foreach($item->mahasiswas as $mhs)
                                     <li>{{ $mhs->nama }} ({{ $mhs->nim }})</li>
                                 @endforeach
                             </ul>
-                            <small><strong>Unit:</strong> {{ $item->unit_magang ?? '-' }}</small>
+                            <small><strong>Unit:</strong> {{ $item->unit_magang ?? '-' }}</small><br>
+                            <small><strong>Tanggal:</strong> {{ $item->tanggal_mulai }} s.d. {{ $item->tanggal_selesai }}</small>
                         </td>
-                        <td>{{ $item->tanggal_mulai }} s.d. {{ $item->tanggal_selesai }}</td>
-                        <td>
+                        <td class="detail-td" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $item->id }}">
                             @php
                                 $badgeColor = match($item->status) {
                                     'diajukan' => 'warning',
@@ -62,7 +62,7 @@
 
                             <span class="badge bg-{{ $badgeColor }}">{{ $statusText }}</span>
                         </td>
-                        <td style="max-width: 220px;" class="stop-click">
+                        <td style="max-width: 100px;">
                             <div class="d-flex flex-wrap gap-1">
                             @if ($item->status === ['diajukan','ditolak'])
                                 <a href="{{ route('dosen.pengajuan.edit', $item->id) }}" class="btn btn-sm btn-warning stop-click">Edit</a>
@@ -99,7 +99,7 @@
                                 <a href="{{ route('dosen.pengajuan.surat', $item->id) }}" target="_blank" class="btn btn-sm btn-outline-primary stop-click">
                                     📄 Cetak Surat
                                 </a>
-                                <a href="{{ route('dosen.pengajuan.sertifikat', $item->id) }}" target="_blank" class="btn btn-sm btn-outline-success stop-click">
+                                <a href="{{ route('dosen.sertifikat.download', $item->id) }}" target="_blank" class="btn btn-sm btn-outline-success stop-click">
                                     📄 Cetak Sertifikat
                                 </a>
                             @endif

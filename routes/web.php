@@ -13,6 +13,7 @@ use App\Http\Controllers\Dosen\BerkasController as DosenBerkasController;
 use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
 use App\Http\Controllers\Dosen\InvoiceController as DosenInvoiceController;
 use App\Http\Controllers\Dosen\SuratController as DosenSuratController;
+use App\Http\Controllers\Dosen\SertifikatController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\JabatanController;
 use App\Http\Controllers\Admin\PegawaiController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardControll
 use App\Http\Controllers\Admin\PegawaiUserController;
 use App\Http\Controllers\Admin\PelatihanController as AdminPelatihanController;
 use App\Http\Controllers\Pegawai\PelatihanController as PegawaiPelatihanController;
+
 
 
 // Route::get('/', function () {

@@ -39,8 +39,9 @@ class SuratController extends Controller
 
         // $pdf = PDF::loadView('dosen.surat.sertifikat', compact('pengajuan'))->setPaper('A4', 'landscape');
 
-        $pdf = Pdf::loadView('dosen.sertifikat.template', compact('pengajuan'))->setPaper([0, 0, 609.45, 935.43], 'landscape');
-
+        foreach ($pengajuan->mahasiswas as $mhs) {
+            $pdf = Pdf::loadView('dosen.sertifikat.template', compact('pengajuan','mhs'))->setPaper([0, 0, 609.45, 935.43], 'landscape');
+        }
 
         return $pdf->stream('Sertifikat-'.$pengajuan->id.'.pdf');
     }

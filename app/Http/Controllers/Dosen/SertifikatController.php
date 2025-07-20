@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use ZipArchive;
 use File;
 use Storage;
+use App\Models\Pengajuan;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -27,7 +28,7 @@ class SertifikatController extends Controller
         File::makeDirectory($tempDir, 0755, true, true);
 
         foreach ($pengajuan->mahasiswas as $mhs) {
-            $pdf = Pdf::loadView('dosen.sertifikat.template', compact('pengajuan', 'mhs'));
+            $pdf = Pdf::loadView('dosen.sertifikat.template', compact('pengajuan', 'mhs'))->setPaper([0, 0, 609.45, 935.43], 'landscape');
             $pdfPath = $tempDir . '/' . Str::slug($mhs->nama) . '.pdf';
             $pdf->save($pdfPath);
         }
