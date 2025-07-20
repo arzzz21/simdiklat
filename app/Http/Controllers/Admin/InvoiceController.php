@@ -12,83 +12,78 @@ class InvoiceController extends Controller
 {
     public function create(Pengajuan $pengajuan)
     {
-        $jenis = $pengajuan->jenisProgram;
-        $biaya = $jenis->biaya;
-        $tipeBiaya = $jenis->metode_biaya; // per_bulan, per_minggu, flat
-        // Ambil jumlah mahasiswa
-        $jumlahMahasiswa = $pengajuan->mahasiswas->count();
-
-        // Parsing tanggal
         $tanggalMulai = Carbon::parse($pengajuan->tanggal_mulai);
         $tanggalSelesai = Carbon::parse($pengajuan->tanggal_selesai);
-        $jumlahHari = $tanggalMulai->diffInDays($tanggalSelesai) + 1;
-
-        // Hitung bulan dan minggu
-        $bulan = floor($jumlahHari / 30);
-        $sisaHari = $jumlahHari % 30;
-        $minggu = ceil($sisaHari / 7);
-
-        // Jika 4 minggu, dianggap 1 bulan
-        if ($minggu === 4) {
-            $bulan += 1;
-            $minggu = 0;
-        }
-
-        // Format tampilan lama magang
-        $lamaMagang = '';
-        $lamaParts = [];
-
-        switch ($tipeBiaya) {
-            case 'per_bulan':
-                // Tambahkan 1 bulan jika ada sisa minggu/hari
-                if ($minggu > 0 || $sisaHari > 0) {
-                    $bulan += 1;
-                    $minggu = 0;
-                }
-
-                $totalPerOrang = $bulan * $biaya;
-                $total = $totalPerOrang * $jumlahMahasiswa;
-
-                $lamaMagang = $bulan . ' bulan';
-                break;
-
-            case 'per_minggu':
-                $jumlahMinggu = ceil($jumlahHari / 7);
-                $totalPerOrang = $jumlahMinggu * $biaya;
-                $total = $totalPerOrang * $jumlahMahasiswa;
-
-                $lamaMagang = $jumlahMinggu . ' minggu';
-                break;
-
-            case 'flat':
-            default:
-                $totalPerOrang = $biaya;
-                $total = $totalPerOrang * $jumlahMahasiswa;
-
-                if ($bulan > 0) $lamaParts[] = "$bulan bulan";
-                if ($minggu > 0) $lamaParts[] = "$minggu minggu";
-                if ($sisaHari > 0) $lamaParts[] = "$sisaHari hari";
-                if (empty($lamaParts)) $lamaParts[] = "0 hari";
-
-                $lamaMagang = implode(' ', $lamaParts);
-                break;
-        }
 
         // Format tanggal
         $Mulai = $tanggalMulai->format('d-m-Y');
         $Selesai = $tanggalSelesai->format('d-m-Y');
 
+        // Total hari magang
+        $totalHari = $tanggalMulai->diffInDays($tanggalSelesai) + 1;
+
+        // Ambil total selisih tahun, bulan, dan hari
+        $diff = $tanggalMulai->diff($tanggalSelesai);
+
+        $tahun = $diff->y;
+        $bulan = $diff->m;
+        $hari = $diff->d;
+
+        // Ubah sisa hari menjadi minggu dan sisa hari
+        $minggu = intdiv($hari, 7);
+        $sisaHari = $hari % 7;
+
+        // Bangun string durasi
+        $lamaParts = [];
+        if ($tahun > 0) {
+            $lamaParts[] = "$tahun tahun";
+        }
+        if ($bulan > 0) {
+            $lamaParts[] = "$bulan bulan";
+        }
+        if ($minggu > 0) {
+            $lamaParts[] = "$minggu minggu";
+        }
+        if ($sisaHari > 0) {
+            $lamaParts[] = "$sisaHari hari";
+        }
+
+        // Gabung semua bagian
+        $lamaMagang = implode(' ', $lamaParts);
+
+        // Hitung biaya berdasarkan metode
+        $jenis = $pengajuan->jenisProgram;
+        $biaya = 0;
+
+        switch ($jenis->metode_biaya) {
+            case 'per_bulan':
+                $tanggalIter = $tanggalMulai->copy()->startOfMonth();
+                $daftarBulan = [];
+
+                while ($tanggalIter <= $tanggalSelesai) {
+                    $daftarBulan[] = $tanggalIter->format('Y-m');
+                    $tanggalIter->addMonth();
+                }
+
+                $jumlahBulan = count(array_unique($daftarBulan));
+                $biaya = $jumlahBulan * $jenis->biaya;
+                break;
+            case 'per_minggu':
+                $durasi = ceil($totalHari / 7);
+                $biaya = $durasi * $jenis->biaya;
+                break;
+            case 'flat':
+                $biaya = $jenis->biaya;
+                break;
+        }
+
         return view('admin.invoice.create', compact(
             'pengajuan',
             'jenis',
-            'total',
+            'lamaMagang',
+            'biaya',
             'Mulai',
             'Selesai',
-            'lamaMagang',
-            'jumlahMinggu',
-            'jumlahHari',
-            'jumlahMahasiswa',
-            'totalPerOrang'
         ));
     }
 
@@ -245,6 +240,8 @@ class InvoiceController extends Controller
         $invoice->status = $request->status;
         $invoice->save();
 
+        $pengajuan = Pengajuan::findOrFail($invoice->pengajuan_id);
+        $pengajuan->update(['status' => 'selesai']);
         return redirect()->route('admin.invoice.verifikasi.index')->with('success', 'Verifikasi berhasil disimpan.');
     }
 

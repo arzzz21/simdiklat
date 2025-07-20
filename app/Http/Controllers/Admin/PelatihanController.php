@@ -40,6 +40,8 @@ class PelatihanController extends Controller
         // Simpan file jika ada
         if ($request->hasFile('file_info')) {
             $path = $request->file('file_info')->store('pelatihan_info', 'public');
+            // Atur permission file agar bisa dibaca publik
+            @chmod(storage_path('app/public/' . $path), 0644);
             $data['file_info'] = $path;
         }
 

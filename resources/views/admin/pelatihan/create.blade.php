@@ -31,6 +31,7 @@
                 <input type="file" name="file_info" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
             </div>
             <button type="submit" class="btn btn-success">Simpan</button>
+            <a href="{{ route('admin.pelatihan.index') }}" class="btn btn-secondary ms-2">Batal</a>
         </form>
     </div>
 </div>

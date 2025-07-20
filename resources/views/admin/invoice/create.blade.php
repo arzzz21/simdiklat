@@ -19,13 +19,7 @@
             <tr>
                 <th>Lama Magang</th>
                 <td>
-                    @if($jenis->metode_biaya == 'per_bulan')
                     {{ $lamaMagang }}
-                    @elseif($jenis->metode_biaya == 'per_minggu')
-                    {{ $jumlahMinggu }} minggu
-                    @else
-                    {{ $lamaMagang }} ({{ $jumlahHari }} hari)
-                    @endif
                 </td>
             </tr>
             <tr>
@@ -50,13 +44,13 @@
             </tr>
             <tr>
                 <th>Total Biaya</th>
-                <td><strong>Rp{{ number_format($total, 0, ',', '.') }}</strong></td>
+                <td><strong>Rp{{ number_format($biaya, 0, ',', '.') }}</strong></td>
             </tr>
         </table>
 
         <form action="{{ route('admin.invoice.store', $pengajuan->id) }}" method="POST">
             @csrf
-            <input type="hidden" name="total" value="{{ $total }}">
+            <input type="hidden" name="total" value="{{ $biaya }}">
             <button type="submit" class="btn btn-primary">Terbitkan Invoice</button>
             <a href="{{ route('admin.pengajuan.index') }}" class="btn btn-secondary">Kembali</a>
         </form>

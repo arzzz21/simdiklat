@@ -62,20 +62,20 @@
 
                             <span class="badge bg-{{ $badgeColor }}">{{ $statusText }}</span>
                         </td>
-                        <td style="max-width: 220px;">
+                        <td style="max-width: 220px;" class="stop-click">
                             <div class="d-flex flex-wrap gap-1">
                             @if ($item->status === ['diajukan','ditolak'])
-                                <a href="{{ route('dosen.pengajuan.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ route('dosen.pengajuan.edit', $item->id) }}" class="btn btn-sm btn-warning stop-click">Edit</a>
                             {{-- @else
                                 <button class="btn btn-sm btn-secondary" disabled>Edit</button> --}}
                             @endif
 
                             @if ($item->status == 'diterima')
-                                <a href="{{ route('dosen.pengajuan.berkas', $item->id) }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('dosen.pengajuan.berkas', $item->id) }}" class="btn btn-sm btn-warning stop-click">
                                 Upload Berkas
                                 </a>
                             @elseif ($item->status == 'berkas_tidak_sesuai')
-                                <a href="{{ route('dosen.pengajuan.berkas', $item->id) }}" class="btn btn-sm btn-danger">
+                                <a href="{{ route('dosen.pengajuan.berkas', $item->id) }}" class="btn btn-sm btn-danger stop-click">
                                 Perbaiki Berkas
                                 </a>
                             @elseif ($item->status == 'diajukan')
@@ -85,21 +85,21 @@
                             @endif
 
                             @if ($item->invoice && $item->status !== 'selesai')
-                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#invoiceModal{{ $item->id }}">
+                                <button type="button" class="btn btn-sm btn-primary stop-click" data-bs-toggle="modal" data-bs-target="#invoiceModal{{ $item->id }}">
                                     💳 Lihat Invoice
                                 </button>
                             @endif
                             @if ($item->status === 'selesai')
-                                <a href="{{ route('dosen.kuitansi.cetak', $item->id) }}" class="btn btn-sm btn-success" target="_blank">Cetak Kuitansi</a>
+                                <a href="{{ route('dosen.kuitansi.cetak', $item->id) }}" class="btn btn-sm btn-success stop-click" target="_blank">Cetak Kuitansi</a>
                             @endif
                             @if (
                                 $item->status === 'selesai' &&
                                 \Carbon\Carbon::now()->gt(\Carbon\Carbon::parse($item->tanggal_selesai))
                             )
-                                <a href="{{ route('dosen.pengajuan.surat', $item->id) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ route('dosen.pengajuan.surat', $item->id) }}" target="_blank" class="btn btn-sm btn-outline-primary stop-click">
                                     📄 Cetak Surat
                                 </a>
-                                <a href="{{ route('dosen.pengajuan.sertifikat', $item->id) }}" target="_blank" class="btn btn-sm btn-outline-success">
+                                <a href="{{ route('dosen.pengajuan.sertifikat', $item->id) }}" target="_blank" class="btn btn-sm btn-outline-success stop-click">
                                     📄 Cetak Sertifikat
                                 </a>
                             @endif
@@ -164,4 +164,13 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.stop-click').forEach(function (btn) {
+            btn.addEventListener('click', function (event) {
+                event.stopPropagation();
+            });
+        });
+    });
+</script>
 @endsection

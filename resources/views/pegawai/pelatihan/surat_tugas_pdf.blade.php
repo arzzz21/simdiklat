@@ -108,19 +108,73 @@
         </tr>
     </table>
     <hr>
-    <div class="content">
-        <p>Yang bertanda tangan di bawah ini menugaskan:</p>
-
-        <p><strong>{{ $pegawai->nama }}</strong><br>
-        Unit: {{ $pegawai->unit->nama }}<br>
-        Jabatan: {{ $pegawai->jabatan->nama }}</p>
-
-        <p>Untuk mengikuti pelatihan:</p>
-        <p><strong>{{ $pelatihan->nama }}</strong><br>
-        Tempat: {{ $pelatihan->tempat }}<br>
-        Tanggal: {{ \Carbon\Carbon::parse($pelatihan->tanggal_mulai)->format('d-m-Y') }} s.d. {{ \Carbon\Carbon::parse($pelatihan->tanggal_selesai)->format('d-m-Y') }}</p>
-
-        <p>Demikian surat tugas ini dibuat untuk digunakan sebagaimana mestinya.</p>
+    <div class="judul">SURAT TUGAS</div>
+    <div class="nomor">Nomor: {{ str_pad($pelatihan->id, 3, '0', STR_PAD_LEFT).'/DIKLAT'.'/PKU-SKH/'.date('Y') }}</div>
+    <div class="content text-center">
+        <table style="width: 90%; margin: 0 auto;">
+            <tr>
+                <td colspan="3" style="padding-bottom: 5px">Yang bertanda tangan di bawah ini :</td>
+            </tr>
+            <tr>
+                <td width="80">Nama</td>
+                <td width="5">:</td>
+                <td>dr. Indarto, M.Si., M.M.</td>
+            </tr>
+            <tr>
+                <td>Jabatan</td>
+                <td>:</td>
+                <td>Direktur Utama Rumah Sakit PKU Muhammadiyah Sukoharjo</td>
+            </tr>
+            <tr>
+                <td>Alamat</td>
+                <td>:</td>
+                <td>Rumah Sakit PKU Muhammadiyah Sukoharjo</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding-bottom: 5px">Dengan ini memberi tugas kepada :</td>
+            </tr>
+            <tr>
+                <td width="80">Nama</td>
+                <td width="5">:</td>
+                <td>{{ $pegawai->nama }}</td>
+            </tr>
+            <tr>
+                <td>NIP</td>
+                <td>:</td>
+                <td>{{ $pegawai->nip }}</td>
+            </tr>
+            <tr>
+                <td>Unit</td>
+                <td>:</td>
+                <td>{{ $pegawai->unit->nama }}</td>
+            </tr>
+            <tr>
+                <td>Alamat</td>
+                <td>:</td>
+                <td>Jalan-jalan</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding-bottom: 5px">Kegiatan {{ $pelatihan->nama }} yang dilaksanakan pada :</td>
+            </tr>
+            <tr>
+                <td width="80">Hari</td>
+                <td width="5">:</td>
+                <td>{{ \Carbon\Carbon::parse($pelatihan->tanggal_mulai)->translatedFormat('l') }}</td>
+            </tr>
+            <tr>
+                <td>Tanggal</td>
+                <td>:</td>
+                <td>{{ \Carbon\Carbon::parse($pelatihan->tanggal_mulai)->format('d-m-Y') }} s.d. {{ \Carbon\Carbon::parse($pelatihan->tanggal_selesai)->format('d-m-Y') }}</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top">Tempat</td>
+                <td style="vertical-align: top">:</td>
+                <td>{!! nl2br(e($pelatihan->tempat)) !!}</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding-top: 5px">Demikian surat tugas ini dibuat untuk dilaksanakan sebaik-baiknya.</td>
+            </tr>
+        </table>
 
     </div>
     @php
@@ -182,6 +236,12 @@
                 <td colspan="2" style="text-align: center; font-weight:bold;">
                     NBM. 1.329.060
                 </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding-top: 20px">Diterima,</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding-top: 80px">(......................)</td>
             </tr>
         </table>
     </div>

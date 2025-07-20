@@ -19,12 +19,14 @@
         }
 
         .container {
+            margin-top: 70mm;
             position: static;
             width: 100%;
-            height: 210mm;
-            padding: 170px 70px 170px 70px;
+            height: 100mm;
+            /* padding: 170px 70px 170px 70px; */
             /* atur agar teks di area tengah background */
             text-align: center;
+            background-color: aquamarine
         }
 
         .no-sertifikat {
@@ -66,6 +68,14 @@
 
 <body>
     <div class="container">
+        <table style="width: 90%; margin: 0 auto; text-align:center;">
+            <tr>
+                <td>No : 00{{ str_pad($pengajuan->id, 4, '0', STR_PAD_LEFT) }}/LAI/UHM/{{ now()->format('Y') }} </td>
+            </tr>
+            <tr>
+                <td>Diberikan kepada :</td>
+            </tr>
+        </table>
         <p class="no-sertifikat"> No :
             00{{ str_pad($pengajuan->id, 4, '0', STR_PAD_LEFT) }}/LAI/UHM/{{ now()->format('Y') }} </p>
         <p class="label">Diberikan kepada :</p>
