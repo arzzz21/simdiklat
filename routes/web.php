@@ -21,6 +21,8 @@ use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardControll
 use App\Http\Controllers\Admin\PegawaiUserController;
 use App\Http\Controllers\Admin\PelatihanController as AdminPelatihanController;
 use App\Http\Controllers\Pegawai\PelatihanController as PegawaiPelatihanController;
+use App\Http\Controllers\Pegawai\LaporanController as PegawaiLaporanController;
+use App\Http\Controllers\Manajer\LaporanController as ManajerLaporanController;
 
 
 
@@ -161,6 +163,20 @@ Route::get('/dosen/pengajuan/{pengajuan}/sertifikat/download', [SertifikatContro
     //CETAK SURAT TUGAS
     Route::get('/pegawai/pelatihan/{pelatihan}/surat-tugas', [PegawaiPelatihanController::class, 'cetakSuratTugas'])->name('pegawai.pelatihan.surat');
 
+    //INPUT LAPORAN PELATIHAN OLEH PEGAWAI
+    Route::middleware(['auth'])->prefix('pegawai')->name('pegawai.')->group(function () {
+        Route::get('pelatihan/{pelatihan}/laporan', [PegawaiLaporanController::class, 'create'])->name('laporan.create');
+        Route::post('pelatihan/{pelatihan}/laporan', [PegawaiLaporanController::class, 'store'])->name('laporan.store');
+        Route::get('/laporan/{laporan}', [PegawaiLaporanController::class, 'show'])->name('laporan.show');
+        Route::get('laporan/{laporan}/edit', [PegawaiLaporanController::class, 'edit'])->name('laporan.edit');
+        Route::put('laporan/{laporan}', [PegawaiLaporanController::class, 'update'])->name('laporan.update');
+    });
 
+    //VERIFIKASI MANAJER
+    Route::middleware(['auth'])->prefix('manajer')->name('manajer.')->group(function () {
+        Route::get('/laporan', [ManajerLaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/{laporan}', [ManajerLaporanController::class, 'show'])->name('laporan.show');
+        Route::post('/laporan/{laporan}/verifikasi', [ManajerLaporanController::class, 'verifikasi'])->name('laporan.verifikasi');
+    });
 
 require __DIR__.'/auth.php';

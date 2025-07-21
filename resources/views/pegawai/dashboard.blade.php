@@ -36,15 +36,41 @@
                         </td>
                         <td>
                             @if (now()->gt($p->tanggal_selesai))
-                                <span class="badge bg-success">Sudah Selesai</span>
+                                <span class="badge bg-success">Pelatihan Selesai</span>
+                            @elseif (now()->gt($p->tanggal_mulai))
+                                <span class="badge bg-secondary">Sedang Pelatihan</span>
                             @else
-                                <span class="badge bg-warning text-dark">Belum Selesai</span>
+                                <span class="badge bg-warning text-dark">Belum Pelatihan</span>
+                            @endif <br>
+
+                            @if ($p->laporan->status === "revisi")
+                                <span class="badge bg-warning">berkas_{{ $p->laporan->status }}</span>
+                            @else
+                                <span class="badge bg-info">berkas_{{ $p->laporan->status }}</span>
                             @endif
                         </td>
                         <td>
                             <a href="{{ route('pegawai.pelatihan.surat', $p->id) }}" class="btn btn-sm btn-success" target="_blank">
                                 View Surat Tugas
                             </a>
+                            @if (now()->gt($p->tanggal_selesai))
+                                @if ($p->laporan)
+                                    <a href="{{ route('pegawai.laporan.show', $p->laporan->id) }}" class="btn btn-sm btn-outline-info">
+                                        Lihat Laporan
+                                    </a>
+                                @else
+                                    <a href="{{ route('pegawai.laporan.create', $p->id) }}" class="btn btn-sm btn-primary">
+                                        Isi Laporan
+                                    </a>
+                                @endif
+                            @endif
+                            @if ($p->laporan->status === "revisi")
+                                <a href="{{ route('pegawai.laporan.edit', $p->laporan->id) }}" class="btn btn-sm btn-outline-warning">
+                                        Edit Laporan
+                                    </a>
+                            @else
+
+                            @endif
                         </td>
                     </tr>
                 @empty

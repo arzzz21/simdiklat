@@ -18,6 +18,15 @@
                 <li><a href="{{ url('/pegawai') }}"><i class="bx bx-home"></i><span>Dashboard Pegawai</span></a></li>
                 @endrole
 
+                @if(auth()->user()->pegawai?->jabatan?->is_manajer)
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('manajer.laporan.index') }}">
+                            <i class="mdi mdi-check-circle"></i>
+                            <span>Verifikasi Laporan</span>
+                        </a>
+                    </li>
+                @endif
+
                 @hasanyrole('admin|dosen')
                 {{-- Manajemen Data --}}
                 <li class="menu-title">Manajemen Data</li>

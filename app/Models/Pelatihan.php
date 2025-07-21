@@ -12,4 +12,8 @@ class Pelatihan extends Model
     {
         return $this->belongsToMany(Pegawai::class, 'pelatihan_pegawai')->withTimestamps();
     }
+    public function laporan()
+    {
+        return $this->hasOne(LaporanPelatihan::class, 'pelatihan_id');
+    }
 }

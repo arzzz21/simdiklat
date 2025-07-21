@@ -16,4 +16,9 @@ class Jabatan extends Model
     {
         return $this->hasMany(Pegawai::class);
     }
+    public function getIsManajerAttribute()
+    {
+        return $this->attributes['is_manajer'] ?? false;
+    }
+
 }
