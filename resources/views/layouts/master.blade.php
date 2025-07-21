@@ -11,10 +11,10 @@
 </head>
 <body data-sidebar="dark">
     <div id="layout-wrapper">
-        @include('layouts.navbar')
         @include('layouts.sidebar')
-
+        
         <div class="main-content">
+            @include('layouts.navbar')
             <div class="page-content">
                 <div class="container-fluid">
                     @yield('content')

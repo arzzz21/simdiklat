@@ -23,13 +23,13 @@ class KampusController extends Controller
         return redirect()->route('kampus.index')->with('success', 'Data kampus ditambahkan');
     }
 
-    public function edit(Kampus $kampus) {
-        return view('kampus.edit', compact('kampus'));
+    public function edit(Kampus $kampu) {
+        return view('kampus.edit', compact('kampu'));
     }
 
-    public function update(Request $request, Kampus $kampus) {
+    public function update(Request $request, Kampus $kampu) {
         $request->validate(['nama' => 'required']);
-        $kampus->update($request->all());
+        $kampu->update($request->all());
         return redirect()->route('kampus.index')->with('success', 'Data kampus diperbarui');
     }
 

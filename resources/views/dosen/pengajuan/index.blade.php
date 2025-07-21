@@ -35,8 +35,9 @@
                                     <li>{{ $mhs->nama }} ({{ $mhs->nim }})</li>
                                 @endforeach
                             </ul>
-                            <small><strong>Unit:</strong> {{ $item->unit_magang ?? '-' }}</small><br>
-                            <small><strong>Tanggal:</strong> {{ $item->tanggal_mulai }} s.d. {{ $item->tanggal_selesai }}</small>
+                            <small><strong>Kampus : </strong>{{ $item->user->kampus->nama }}</small><br>
+                            <small><strong>Unit : </strong> {{ $item->unit_magang ?? '-' }}</small><br>
+                            <small><strong>Tanggal : </strong> {{ $item->tanggal_mulai }} s.d. {{ $item->tanggal_selesai }}</small>
                         </td>
                         <td class="detail-td" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $item->id }}">
                             @php

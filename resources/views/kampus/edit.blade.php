@@ -9,13 +9,13 @@
             <div class="card-body">
                 <h4 class="card-title mb-4">Edit Kampus</h4>
 
-                <form action="{{ route('kampus.update', $kampus->id) }}" method="POST">
+                <form action="{{ route('kampus.update', $kampu->id) }}" method="POST">
                     @csrf
                     @method('PUT')
 
                     <div class="mb-3">
                         <label for="nama" class="form-label">Nama Kampus</label>
-                        <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama', $kampus->nama) }}" required>
+                        <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama', $kampu->nama) }}" required>
                         @error('nama')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -23,7 +23,7 @@
 
                     <div class="mb-3">
                         <label for="alamat" class="form-label">Alamat</label>
-                        <textarea name="alamat" class="form-control">{{ old('alamat', $kampus->alamat) }}</textarea>
+                        <textarea name="alamat" class="form-control">{{ old('alamat', $kampu->alamat) }}</textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Update</button>

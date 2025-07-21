@@ -2,8 +2,9 @@
 @section('title', 'Verifikasi Invoice')
 
 @section('content')
-<div class="card mb-4">
-  <div class="card-header"><h5>Filter Invoice</h5></div>
+
+<div class="card">
+  <div class="card-header"><h5>Daftar Invoice</h5></div>
   <div class="card-body">
     <form method="GET" action="{{ route('admin.invoice.verifikasi.index') }}" class="row g-3">
       <div class="col-md-3">
@@ -27,10 +28,6 @@
       </div>
     </form>
   </div>
-</div>
-
-<div class="card">
-  <div class="card-header"><h5>Daftar Invoice</h5></div>
   <div class="card-body">
     <table class="table table-bordered table-striped table-sm">
       <thead>

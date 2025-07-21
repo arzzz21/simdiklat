@@ -44,7 +44,7 @@ class MahasiswaController extends Controller
 
     public function edit(Mahasiswa $mahasiswa)
     {
-        $this->authorize('update', $mahasiswa); // optional if using policy
+        // $this->authorize('update', $mahasiswa); // optional if using policy
         $kampus = Kampus::all();
         return view('mahasiswa.edit', compact('mahasiswa', 'kampus'));
     }

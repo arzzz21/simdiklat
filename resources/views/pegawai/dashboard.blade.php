@@ -43,9 +43,9 @@
                                 <span class="badge bg-warning text-dark">Belum Pelatihan</span>
                             @endif <br>
 
-                            @if ($p->laporan->status === "revisi")
+                            @if ($p->laporan && $p->laporan->status === "revisi")
                                 <span class="badge bg-warning">berkas_{{ $p->laporan->status }}</span>
-                            @else
+                            @elseif ($p->laporan)
                                 <span class="badge bg-info">berkas_{{ $p->laporan->status }}</span>
                             @endif
                         </td>
@@ -64,12 +64,10 @@
                                     </a>
                                 @endif
                             @endif
-                            @if ($p->laporan->status === "revisi")
+                            @if ($p->laporan && $p->laporan->status === "revisi")
                                 <a href="{{ route('pegawai.laporan.edit', $p->laporan->id) }}" class="btn btn-sm btn-outline-warning">
                                         Edit Laporan
                                     </a>
-                            @else
-
                             @endif
                         </td>
                     </tr>
