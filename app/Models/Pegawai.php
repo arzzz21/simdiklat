@@ -31,4 +31,14 @@ class Pegawai extends Model
     {
         return $this->belongsToMany(Pelatihan::class, 'pelatihan_pegawai')->withTimestamps();
     }
+
+    public function ihtParticipants()
+    {
+        return $this->hasMany(IhtParticipant::class);
+    }
+
+    public function ihts()
+    {
+        return $this->hasMany(IhtParticipant::class);
+    }
 }

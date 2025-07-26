@@ -16,6 +16,12 @@
 
                 @role('pegawai')
                 <li><a href="{{ url('/pegawai') }}"><i class="bx bx-home"></i><span>Dashboard Pegawai</span></a></li>
+                <li class="nav-item">
+                    <a href="{{ route('pegawai.iht.index') }}" class="nav-link">
+                        <i class="fas fa-briefcase-medical"></i>
+                        <span>IHT Saya</span>
+                    </a>
+                </li>
                 @endrole
 
                 @if(auth()->user()->pegawai?->jabatan?->is_manajer)
@@ -105,6 +111,12 @@
                         <a href="{{ route('admin.pelatihan.index') }}" class="nav-link">
                             <i class="mdi mdi-teach"></i> {{-- ganti icon sesuai template kamu --}}
                             <span>Pelatihan Luar RS</span>
+                        </a>
+                    </li>
+                    <li class="{{ request()->is('admin/iht*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.iht.index') }}">
+                            <i class="mdi mdi-account-multiple"></i>
+                            <span>Manajemen IHT</span>
                         </a>
                     </li>
                 @endrole

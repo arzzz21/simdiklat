@@ -10,6 +10,8 @@ class LaporanController extends Controller
 {
     public function index()
     {
+        // print_r(auth()->user());
+        // die();
         $unitId = auth()->user()->pegawai->unit_id;
         $laporans = LaporanPelatihan::whereHas('pegawai', function ($query) use ($unitId) {
             $query->where('unit_id', $unitId);

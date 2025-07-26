@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\PelatihanController as AdminPelatihanController;
 use App\Http\Controllers\Pegawai\PelatihanController as PegawaiPelatihanController;
 use App\Http\Controllers\Pegawai\LaporanController as PegawaiLaporanController;
 use App\Http\Controllers\Manajer\LaporanController as ManajerLaporanController;
+use App\Http\Controllers\Admin\IhtController as AdminIhtController;
+use App\Http\Controllers\Pegawai\IhtController as PegawaiIhtController;
 
 
 
@@ -179,4 +181,26 @@ Route::get('/dosen/pengajuan/{pengajuan}/sertifikat/download', [SertifikatContro
         Route::post('/laporan/{laporan}/verifikasi', [ManajerLaporanController::class, 'verifikasi'])->name('laporan.verifikasi');
     });
 
+    //IHT
+    Route::middleware(['auth'])->prefix('admin/iht')->name('admin.iht.')->group(function () {
+        Route::get('/', [AdminIhtController::class, 'index'])->name('index');
+        Route::get('/create', [AdminIhtController::class, 'create'])->name('create');
+        Route::post('/store', [AdminIhtController::class, 'store'])->name('store');
+        Route::get('/{iht}/edit', [AdminIhtController::class, 'edit'])->name('edit');
+        Route::put('/{iht}', [AdminIhtController::class, 'update'])->name('update');
+        Route::delete('/{iht}', [AdminIhtController::class, 'destroy'])->name('destroy');
+        Route::get('/{iht}/peserta', [AdminIhtController::class, 'peserta'])->name('peserta');
+        Route::post('/{iht}/peserta/tambah', [AdminIhtController::class, 'tambahPeserta'])->name('peserta.tambah');
+        Route::delete('/{iht}/peserta/{participant_id}', [AdminIhtController::class, 'hapusPeserta'])->name('peserta.hapus');
+        Route::get('/admin/iht/{iht}/presensi', [AdminIhtController::class, 'presensi'])->name('presensi');
+        Route::post('/admin/iht/{iht}/presensi', [AdminIhtController::class, 'simpanPresensi'])->name('presensi.simpan');
+        Route::get('/admin/iht/{id}/generate-sertifikat', [AdminIhtController::class, 'generateSertifikat'])->name('generate-sertifikat');
+    });
+
+    //VIEW IHT PEGAWAI
+    Route::middleware(['auth'])->prefix('pegawai')->name('pegawai.')->group(function () {
+        Route::get('/', [PegawaiIhtController::class, 'index'])->name('iht.index');
+        Route::get('/iht/evaluasi/{participant}', [PegawaiIhtController::class, 'evaluasiForm'])->name('iht.evaluasi');
+        Route::post('/iht/evaluasi/{participant}', [PegawaiIhtController::class, 'submitEvaluasi'])->name('iht.evaluasi.submit');
+    });
 require __DIR__.'/auth.php';
