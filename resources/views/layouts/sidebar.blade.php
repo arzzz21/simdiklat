@@ -85,7 +85,7 @@
                     </li>
                 @endrole
                 @role('admin')
-                    <li class="menu-title">Manajemen Magang dan Pelatihan</li>
+                    <li class="menu-title">Manajemen Magang</li>
 
                     <li class="{{ request()->routeIs('admin.pengajuan.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.pengajuan.index') }}">
@@ -110,13 +110,13 @@
                     <li class="nav-item">
                         <a href="{{ route('admin.pelatihan.index') }}" class="nav-link">
                             <i class="mdi mdi-teach"></i> {{-- ganti icon sesuai template kamu --}}
-                            <span>Pelatihan Luar RS</span>
+                            <span>Pelatihan Eksternal</span>
                         </a>
                     </li>
                     <li class="{{ request()->is('admin/iht*') ? 'active' : '' }}">
                         <a href="{{ route('admin.iht.index') }}">
                             <i class="mdi mdi-account-multiple"></i>
-                            <span>Manajemen IHT</span>
+                            <span>Pelatihan Internal</span>
                         </a>
                     </li>
                 @endrole

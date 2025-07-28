@@ -25,6 +25,7 @@
                 <th>Nama</th>
                 <th>NIP</th>
                 <th>Hadir</th>
+                <th>Evaluasi</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -34,6 +35,7 @@
                 <td>{{ $peserta->pegawai->nama }}</td>
                 <td>{{ $peserta->pegawai->nip }}</td>
                 <td>{{ $peserta->hadir ? '✔' : '✘' }}</td>
+                <td>{{ $peserta->evaluasi }}</td>
                 <td>
                     <form action="{{ route('admin.iht.peserta.hapus', [$iht->id, $peserta->id]) }}" method="POST"
                         onsubmit="return confirm('Hapus peserta ini?')">

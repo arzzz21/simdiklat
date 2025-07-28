@@ -18,11 +18,13 @@ use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\JabatanController;
 use App\Http\Controllers\Admin\PegawaiController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PegawaiUserController;
 use App\Http\Controllers\Admin\PelatihanController as AdminPelatihanController;
 use App\Http\Controllers\Pegawai\PelatihanController as PegawaiPelatihanController;
 use App\Http\Controllers\Pegawai\LaporanController as PegawaiLaporanController;
 use App\Http\Controllers\Manajer\LaporanController as ManajerLaporanController;
+use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Admin\IhtController as AdminIhtController;
 use App\Http\Controllers\Pegawai\IhtController as PegawaiIhtController;
 
@@ -52,9 +54,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin', fn () => view('admin.dashboard'));
+    // Route::get('/admin', fn () => view('admin.dashboard'));
+    Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/dosen', fn () => view('dosen.dashboard'));
-    Route::get('/pegawai', [\App\Http\Controllers\Pegawai\DashboardController::class, 'index'])->name('pegawai.dashboard');
+    Route::get('/pegawai', [PegawaiDashboardController::class, 'index'])->name('pegawai.dashboard');
 });
 
 Route::get('/redirect-after-login', function () {
@@ -183,7 +186,7 @@ Route::get('/dosen/pengajuan/{pengajuan}/sertifikat/download', [SertifikatContro
 
     //IHT
     Route::middleware(['auth'])->prefix('admin/iht')->name('admin.iht.')->group(function () {
-        Route::get('/', [AdminIhtController::class, 'index'])->name('index');
+        Route::get('/iht', [AdminIhtController::class, 'index'])->name('index');
         Route::get('/create', [AdminIhtController::class, 'create'])->name('create');
         Route::post('/store', [AdminIhtController::class, 'store'])->name('store');
         Route::get('/{iht}/edit', [AdminIhtController::class, 'edit'])->name('edit');
@@ -199,8 +202,21 @@ Route::get('/dosen/pengajuan/{pengajuan}/sertifikat/download', [SertifikatContro
 
     //VIEW IHT PEGAWAI
     Route::middleware(['auth'])->prefix('pegawai')->name('pegawai.')->group(function () {
-        Route::get('/', [PegawaiIhtController::class, 'index'])->name('iht.index');
+        Route::get('/iht', [PegawaiIhtController::class, 'index'])->name('iht.index');
         Route::get('/iht/evaluasi/{participant}', [PegawaiIhtController::class, 'evaluasiForm'])->name('iht.evaluasi');
         Route::post('/iht/evaluasi/{participant}', [PegawaiIhtController::class, 'submitEvaluasi'])->name('iht.evaluasi.submit');
     });
+
+    //LAPORAN
+    Route::prefix('admin')->middleware(['auth'])->group(function () {
+        Route::get('/laporan/magang', [AdminLaporanController::class, 'magang'])->name('admin.laporan.magang');
+        Route::get('/laporan/pelatihan', [AdminLaporanController::class, 'pelatihan'])->name('admin.laporan.pelatihan');
+        Route::get('/laporan/iht', [AdminLaporanController::class, 'iht'])->name('admin.laporan.iht');
+
+        // Export
+        Route::get('/laporan/magang/export', [AdminLaporanController::class, 'exportMagang'])->name('admin.laporan.magang.export');
+        Route::get('/laporan/pelatihan/export', [AdminLaporanController::class, 'exportPelatihan'])->name('admin.laporan.pelatihan.export');
+        Route::get('/laporan/iht/export', [AdminLaporanController::class, 'exportIht'])->name('admin.laporan.iht.export');
+    });
+
 require __DIR__.'/auth.php';

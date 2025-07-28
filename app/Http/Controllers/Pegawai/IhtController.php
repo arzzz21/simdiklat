@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pegawai;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\IhtParticipant;
 
 class IhtController extends Controller
 {
@@ -25,7 +26,7 @@ class IhtController extends Controller
             'evaluasi' => 'required|string|max:1000'
         ]);
         $participant->evaluasi = $request->evaluasi;
-        $participant->evaluasi_at = now();
+        $participant->updated_at = now();
         $participant->save();
 
         return redirect()->route('pegawai.iht.index')->with('success', 'Evaluasi berhasil dikirim.');
