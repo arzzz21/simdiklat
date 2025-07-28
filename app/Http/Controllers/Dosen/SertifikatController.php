@@ -10,6 +10,7 @@ use Storage;
 use App\Models\Pengajuan;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class SertifikatController extends Controller
 {
@@ -23,12 +24,23 @@ class SertifikatController extends Controller
         $zipFileName = 'sertifikat-' . Str::slug($pengajuan->jenisProgram->nama) . '-' . $pengajuan->id . '.zip';
         $zipPath = storage_path('app/public/' . $zipFileName);
 
+        //QR
+        $isiQR = "Surat ini ditandatangani oleh: dr. Indarto, M.Si., M.M selaku Direktur Utama RS PKU Muhammadiyah Sukoharjo pada $pengajuan->tanggal_selesai";
+
+        // Buat SVG base64 agar aman dipakai di PDF
+        $qrSvg = QrCode::format('svg')->size(120)->generate($isiQR);
+        $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
+
         // Buat folder sementara
         $tempDir = storage_path('app/temp_sertifikat/' . $folderName);
         File::makeDirectory($tempDir, 0755, true, true);
 
         foreach ($pengajuan->mahasiswas as $mhs) {
-            $pdf = Pdf::loadView('dosen.sertifikat.template', compact('pengajuan', 'mhs'))->setPaper([0, 0, 609.45, 935.43], 'landscape');
+            $pdf = Pdf::loadView('dosen.sertifikat.template', [
+                'pengajuan' => $pengajuan,
+                'mhs' => $mhs,
+                'qrBase64' => $qrBase64,
+            ])->setPaper([0, 0, 609.45, 935.43], 'landscape');
             $pdfPath = $tempDir . '/' . Str::slug($mhs->nama) . '.pdf';
             $pdf->save($pdfPath);
         }

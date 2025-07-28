@@ -38,9 +38,18 @@ class SuratController extends Controller
         }
 
         // $pdf = PDF::loadView('dosen.surat.sertifikat', compact('pengajuan'))->setPaper('A4', 'landscape');
+        $isiQR = "Surat ini ditandatangani oleh: dr. Indarto, M.Si., M.M selaku Direktur Utama RS PKU Muhammadiyah Sukoharjo pada $pengajuan->tanggal_selesai";
+
+        // Buat SVG base64 agar aman dipakai di PDF
+        $qrSvg = QrCode::format('svg')->size(120)->generate($isiQR);
+        $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
 
         foreach ($pengajuan->mahasiswas as $mhs) {
-            $pdf = Pdf::loadView('dosen.sertifikat.template', compact('pengajuan','mhs'))->setPaper([0, 0, 609.45, 935.43], 'landscape');
+            $pdf = Pdf::loadView('dosen.sertifikat.template', [
+                'pengajuan' => $pengajuan,
+                'mhs' => $mhs,
+                'qrBase64' => $qrBase64,
+            ])->setPaper([0, 0, 609.45, 935.43], 'landscape');
         }
 
         return $pdf->stream('Sertifikat-'.$pengajuan->id.'.pdf');

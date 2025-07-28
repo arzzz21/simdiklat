@@ -13,6 +13,7 @@ class IhtParticipant extends Model
         'pegawai_id',
         'hadir',
         'evaluasi',
+        'sertifikat_path',
     ];
 
     public function iht()

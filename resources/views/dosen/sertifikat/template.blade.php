@@ -70,6 +70,13 @@
             font-size: 24px;
             line-height: 1.0;
         }
+        .ttd {
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px;
+            color: solid black;
+            font-weight: bold;
+        }
         hr {
             border: 1px solid black;
             margin-top: 4px;
@@ -85,10 +92,10 @@
                 <td class="nomer">No : {{ str_pad($pengajuan->id, 4, '0', STR_PAD_LEFT) }}/LAI/UHM/III.6.AU/PKUSKH/{{ now()->format('Y') }} </td>
             </tr>
             <tr>
-                <td class="label" style="padding-top: 15px;">Diberikan kepada :</td>
+                <td class="label" style="padding-top: 10px;">Diberikan kepada :</td>
             </tr>
             <tr>
-                <td class="nama" style="border-bottom: 2px solid #000; padding-top: 15px;">{{ $mhs->nama }}</td>
+                <td class="nama" style="border-bottom: 2px solid #000; padding-top: 10px;">{{ $mhs->nama }}</td>
             </tr>
             <tr>
                 <td class="prodi" style="padding-top: 10px;">Pendidikan {{ strtoupper($pengajuan->program_studi) }}</td>
@@ -98,13 +105,34 @@
             </tr>
             <tr>
                 <td class="isi" style="padding-top: 10px;">
-                    Telah melaksanakan {{ $pengajuan->jenisProgram->nama }} di Rumah Sakit PKU Muhammadiyah Sukoharjo mulai dari 
+                    Telah melaksanakan {{ $pengajuan->jenisProgram->nama }} di Rumah Sakit PKU Muhammadiyah Sukoharjo mulai dari
                     {{ \Carbon\Carbon::parse($pengajuan->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }} sampai dengan
                     {{ \Carbon\Carbon::parse($pengajuan->tanggal_selesai)->locale('id')->translatedFormat('d F Y') }}
                     <br>dengan hasil <strong>B (Baik)</strong>
                 </td>
             </tr>
         </table>
+        <div class="ttd" style="padding-left: 70%;">
+            <table style="text-align: center;">
+                <tr>
+                    <td>Direktur Rumah Sakit</td>
+                </tr>
+                <tr>
+                    <td>PKU Muhammadiyah Sukoharjo</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="{{ $qrBase64 }}" width="70">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-decoration: underline">dr. Indarto, M.Si., M.M.</td>
+                </tr>
+                <tr>
+                    <td>NBM. 1329060</td>
+                </tr>
+            </table>
+        </div>
     </div>
 </body>
 

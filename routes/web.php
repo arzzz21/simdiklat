@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\JabatanController;
 use App\Http\Controllers\Admin\PegawaiController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Dosen\DashboardController as DosenDashboardController;
 use App\Http\Controllers\Admin\PegawaiUserController;
 use App\Http\Controllers\Admin\PelatihanController as AdminPelatihanController;
 use App\Http\Controllers\Pegawai\PelatihanController as PegawaiPelatihanController;
@@ -56,7 +57,8 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     // Route::get('/admin', fn () => view('admin.dashboard'));
     Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/dosen', fn () => view('dosen.dashboard'));
+    // Route::get('/dosen', fn () => view('dosen.dashboard'));
+    Route::get('/dosen', [DosenDashboardController::class, 'index'])->name('dosen.dashboard');
     Route::get('/pegawai', [PegawaiDashboardController::class, 'index'])->name('pegawai.dashboard');
 });
 

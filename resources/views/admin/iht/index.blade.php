@@ -33,8 +33,26 @@
                         <a href="{{ route('admin.iht.edit', $iht->id) }}" class="btn btn-sm btn-warning">Edit</a>
                         <a href="{{ route('admin.iht.peserta', $iht->id) }}" class="btn btn-sm btn-info">Peserta</a>
                         <a href="{{ route('admin.iht.presensi', $iht->id) }}" class="btn btn-warning btn-sm">Presensi</a>
-                        @if(now()->gt($iht->tanggal_selesai))
-                            <a href="{{ route('admin.iht.generate-sertifikat', $iht->id) }}" class="btn btn-success btn-sm">Generate Sertifikat</a>
+                        @php
+                            $pelatihanSelesai = now()->gt($iht->tanggal_selesai);
+                            $pesertas = $iht->pesertas ?? collect();
+                            $adaYangBelum = $pesertas->contains(function($peserta) {
+                                return empty($peserta->sertifikat_path);
+                            });
+                            $semuaKosong = $pesertas->every(function($peserta) {
+                                return empty($peserta->sertifikat_path);
+                            });
+                        @endphp
+                        @if ($pelatihanSelesai)
+                            @if ($semuaKosong)
+                                <a href="{{ route('admin.iht.generate-sertifikat', $iht->id) }}" class="btn btn-success btn-sm">
+                                    Generate Sertifikat
+                                </a>
+                            @elseif ($adaYangBelum)
+                                <a href="{{ route('admin.iht.generate-sertifikat', $iht->id) }}" class="btn btn-warning btn-sm">
+                                    Perbarui Sertifikat
+                                </a>
+                            @endif
                         @endif
                         <form action="{{ route('admin.iht.destroy', $iht->id) }}" method="POST" style="display:inline;"
                             onsubmit="return confirm('Hapus IHT ini?')">
