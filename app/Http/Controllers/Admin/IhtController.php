@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Iht;
 use App\Models\Pegawai;
 use App\Models\IhtParticipant;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class IhtController extends Controller
 {
@@ -152,30 +154,67 @@ class IhtController extends Controller
     public function generateSertifikat($id)
     {
         $iht = Iht::with('pesertas.pegawai')->findOrFail($id);
+        $tanggal = Carbon::parse($iht->tanggal_selesai)->translatedFormat('d F Y');
+        $isiQR = "Surat ini ditandatangani oleh: dr. Indarto, M.Si., M.M selaku Direktur Utama RS PKU Muhammadiyah Sukoharjo pada $tanggal";
+
+        // QR base64
+        $qrSvg = QrCode::format('svg')->size(120)->generate($isiQR);
+        $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
+
+        // Loop peserta
         foreach ($iht->pesertas as $peserta) {
             if ($peserta->hadir && !$peserta->sertifikat_path) {
                 $pdf = PDF::loadView('admin.iht.sertifikat', [
                     'iht' => $iht,
                     'peserta' => $peserta,
+                    'qrBase64' => $qrBase64,
                 ])->setPaper([0, 0, 609.45, 935.43], 'landscape');
 
-                $filename = 'sertifikatt-' . $peserta->id . '.pdf';
+                $nama = Str::slug($peserta->pegawai->nama);
+                $filename = 'sertifikat-' . $nama . '-' . $peserta->id . '.pdf';
                 $path = 'sertifikat/iht/' . $filename;
-                Storage::disk('public')->makeDirectory('sertifikat/iht');
-                Storage::disk('public')->put($path, $pdf->output());
-                // Storage::put('public/' . $path, $pdf->output());
 
+                Storage::disk('public')->put($path, $pdf->output());
+                
                 $peserta->sertifikat_path = $path;
                 $peserta->save();
             }
         }
+        // print_r($iht->pesertas);
+        //         die();
+        return back()->with('success', 'Sertifikat berhasil dibuat.');
+        // $iht = Iht::with('pesertas.pegawai')->findOrFail($id);
+        // $isiQR = "Surat ini ditandatangani oleh: dr. Indarto, M.Si., M.M selaku Direktur Utama RS PKU Muhammadiyah Sukoharjo pada $iht->tanggal_selesai";
 
-        return back()->with('success', 'Sertifikat berhasil dibuat');
+        // // Buat SVG base64 agar aman dipakai di PDF
+        // $qrSvg = QrCode::format('svg')->size(120)->generate($isiQR);
+        // $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
+        // foreach ($iht->pesertas as $peserta) {
+        //     if ($peserta->hadir && !$peserta->sertifikat_path) {
+        //         $pdf = PDF::loadView('admin.iht.sertifikat', [
+        //             'iht' => $iht,
+        //             'peserta' => $peserta,
+        //             'qrBase64' => $qrBase64,
+        //         ])->setPaper([0, 0, 609.45, 935.43], 'landscape');
+
+        //         $filename = 'sertifikatt-' . $peserta->id . '.pdf';
+        //         $path = 'sertifikat/iht/' . $filename;
+        //         Storage::disk('public')->makeDirectory('sertifikat/iht');
+        //         Storage::disk('public')->put($path, $pdf->output());
+        //         // Storage::put('public/' . $path, $pdf->output());
+
+        //         $peserta->sertifikat_path = $path;
+        //         $peserta->save();
+        //     }
+        // }
+
+        // return back()->with('success', 'Sertifikat berhasil dibuat');
 
         // foreach ($iht->pesertas as $peserta) {
         //         $pdf = PDF::loadView('admin.iht.sertifikat', [
         //             'iht' => $iht,
         //             'peserta' => $peserta,
+        //             'qrBase64' => $qrBase64,
         //         ])->setPaper([0, 0, 609.45, 935.43], 'landscape');
         // }
         // return $pdf->stream('Sertifikat-'.$peserta->id.'.pdf');

@@ -59,7 +59,28 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="laporanModalLabel{{ $item->id }}">Detail Laporan Pelatihan</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                            </div>]
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Nama Pelatihan :</strong> {{ $item->laporan->pelatihan->nama }}</p>
+                                <p><strong>Ringkasan Kegiatan :</strong> {{ $item->laporan->ringkasan }}</p>
+                                <p><strong>Rencana Tindak Lanjut :</strong> </p>
+                                <ul>
+                                    @foreach ($item->laporan->rtl as $point)
+                                        <li>{{ $point }}</li>
+                                    @endforeach
+                                </ul>
+                                <p><strong>Laporan File :</strong>
+                                    <a href="{{ asset('storage/' . $item->laporan->file_laporan) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        Lihat Laporan
+                                    </a>
+                                </p>
+                                <p><strong>Surat Tugas TTD :</strong>
+                                    <a href="{{ asset('storage/' . $item->laporan->file_surat_tugas) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        Lihat Surat
+                                    </a>
+                                </p>
+                                <p><strong>Status :</strong> {{ ucfirst($item->laporan->status) }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

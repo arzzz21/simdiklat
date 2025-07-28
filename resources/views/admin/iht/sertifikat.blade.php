@@ -32,7 +32,7 @@
             font-size: 26px;
             color: #F7B878;
             font-weight: bold;
-            margin-top: 11mm;
+            margin-top: 8mm;
         }
 
         .label2 {
@@ -48,7 +48,7 @@
             font-size: 22px;
             color: #2C3486;
             font-weight: bold;
-            margin-top: 5mm;
+            margin-top: 3mm;
 
         }
         .iht {
@@ -56,11 +56,20 @@
             font-size: 26px;
             color: #E94D3A;
             font-weight: bold;
-            margin-top: 5mm;
+            margin-top: 3mm;
         }
         .tanggal {
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 20px;
+            font-size: 18px;
+            color: solid black;
+            font-weight: bold;
+            margin-top: 3mm;
+        }
+
+        .ttd {
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px;
             color: solid black;
             font-weight: bold;
             margin-top: 5mm;
@@ -104,6 +113,27 @@
     </div>
     <div class="tanggal">{{ \Carbon\Carbon::parse($iht->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }} sampai
         {{ \Carbon\Carbon::parse($iht->tanggal_selesai)->locale('id')->translatedFormat('d F Y') }}</div>
+    </div>
+    <div class="ttd" style="padding-left: 20mm;">
+        <table style="text-align: center;">
+            <tr>
+                <td>Direktur Rumah Sakit</td>
+            </tr>
+            <tr>
+                <td>PKU Muhammadiyah Sukoharjo</td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="{{ $qrBase64 }}" width="70">
+                </td>
+            </tr>
+            <tr>
+                <td style="text-decoration: underline">dr. Indarto, M.Si., M.M.</td>
+            </tr>
+            <tr>
+                <td>NBM. 1329060</td>
+            </tr>
+        </table>
     </div>
 </body>
 
