@@ -163,9 +163,13 @@
     <p class="isi"> Nama tersebut diatas benar-benar telah menyelesaikan kegiatan {{ $pengajuan->jenisProgram->nama }} dengan kompetensi
         sesuai program studi yang diajukan di Unit {{ $pengajuan->unit_magang ?? '-' }} RS PKU
         Muhammadiyah Sukoharjo pada tanggal
-        {{ \Carbon\Carbon::parse($pengajuan->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }} s/d
-        {{ \Carbon\Carbon::parse($pengajuan->tanggal_selesai)->locale('id')->translatedFormat('d F Y') }} dan pembimbing praktik telah
-        melaksanakan tugas sesuai prosedur pembimbingan sesuai dengan mekanisme prosedur pendidikan di Rumah Sakit PKU Muhammadiyah Sukoharjo. </p>
+        @if ($pengajuan->tanggal_mulai === $pengajuan->tanggal_selesai)
+            {{ \Carbon\Carbon::parse($pengajuan->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }}
+        @else
+            {{ \Carbon\Carbon::parse($pengajuan->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }} s/d
+            {{ \Carbon\Carbon::parse($pengajuan->tanggal_selesai)->locale('id')->translatedFormat('d F Y') }}
+        @endif
+        dan pembimbing praktik telah melaksanakan tugas sesuai prosedur pembimbingan sesuai dengan mekanisme prosedur pendidikan di Rumah Sakit PKU Muhammadiyah Sukoharjo. </p>
     @php
         $bulan = [
             'Muḥarram' => 'Muharram',

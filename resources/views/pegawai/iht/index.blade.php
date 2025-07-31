@@ -14,13 +14,17 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Judul</th>
                     <th>Waktu</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody> @foreach ($ihts as $peserta) <tr>
+            <tbody>
+                @foreach ($ihts as $peserta)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $peserta->iht->judul }}</td>
                     <td>{{ \Carbon\Carbon::parse($peserta->iht->tanggal_mulai)->format('d-m-Y') }} s/d
                         {{ \Carbon\Carbon::parse($peserta->iht->tanggal_selesai)->format('d-m-Y') }}</td>
@@ -41,8 +45,9 @@
                         @if($today->between($start, $end))
                             <a href="{{ route('pegawai.iht.evaluasi', $peserta->id) }}" class="btn btn-primary btn-sm">Isi Evaluasi</a>
                         @endif
+                        <a href="{{ asset('storage/' . $peserta->iht->file_materi) }}" target="_blank" class="btn btn-sm btn-outline-primary">Lihat Materi</a>
                         @if ($peserta->sertifikat_path)
-                            <a href="{{ asset('storage/' . $peserta->sertifikat_path) }}" target="_blank">Lihat Sertifikat</a>
+                            <a href="{{ asset('storage/' . $peserta->sertifikat_path) }}" target="_blank" class="btn btn-sm btn-outline-success">Lihat Sertifikat</a>
                         @else
                             Sertifikat Belum tersedia
                         @endif

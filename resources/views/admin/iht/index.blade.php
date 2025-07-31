@@ -19,6 +19,7 @@
                     <th>Waktu</th>
                     <th>Tempat</th>
                     <th>Peserta</th>
+                    <th>File</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -30,9 +31,14 @@
                     <td>{{ $iht->tempat }}</td>
                     <td>{{ $iht->participants_count }} orang</td>
                     <td>
-                        <a href="{{ route('admin.iht.edit', $iht->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <a href="{{ route('admin.iht.peserta', $iht->id) }}" class="btn btn-sm btn-info">Peserta</a>
-                        <a href="{{ route('admin.iht.presensi', $iht->id) }}" class="btn btn-warning btn-sm">Presensi</a>
+                        @if ($iht->file_materi)
+                            <a href="{{ asset('storage/' . $iht->file_materi) }}" target="_blank" class="btn btn-sm btn-outline-primary">Lihat Materi</a>
+                        @endif
+                        @if ($iht->file_dokumentasi)
+                            <a href="{{ asset('storage/' . $iht->file_dokumentasi) }}" target="_blank" class="btn btn-sm btn-outline-success">Lihat Dokumentasi</a>
+                        @endif
+                    </td>
+                    <td>
                         @php
                             $pelatihanSelesai = now()->gt($iht->tanggal_selesai);
                             $pesertas = $iht->pesertas ?? collect();
@@ -43,6 +49,11 @@
                                 return empty($peserta->sertifikat_path);
                             });
                         @endphp
+                        @if (!$pelatihanSelesai)
+                            <a href="{{ route('admin.iht.edit', $iht->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        @endif
+                        <a href="{{ route('admin.iht.peserta', $iht->id) }}" class="btn btn-sm btn-info">Peserta</a>
+                        <a href="{{ route('admin.iht.presensi', $iht->id) }}" class="btn btn-warning btn-sm">Presensi</a>
                         @if ($pelatihanSelesai)
                             @if ($semuaKosong)
                                 <a href="{{ route('admin.iht.generate-sertifikat', $iht->id) }}" class="btn btn-success btn-sm">

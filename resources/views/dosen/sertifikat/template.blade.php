@@ -105,9 +105,13 @@
             </tr>
             <tr>
                 <td class="isi" style="padding-top: 10px;">
-                    Telah melaksanakan {{ $pengajuan->jenisProgram->nama }} di Rumah Sakit PKU Muhammadiyah Sukoharjo mulai dari
-                    {{ \Carbon\Carbon::parse($pengajuan->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }} sampai dengan
-                    {{ \Carbon\Carbon::parse($pengajuan->tanggal_selesai)->locale('id')->translatedFormat('d F Y') }}
+                    Telah melaksanakan {{ $pengajuan->jenisProgram->nama }} di Rumah Sakit PKU Muhammadiyah Sukoharjo pada tanggal
+                    @if ($pengajuan->tanggal_mulai === $pengajuan->tanggal_selesai)
+                        {{ \Carbon\Carbon::parse($pengajuan->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }}
+                    @else
+                        {{ \Carbon\Carbon::parse($pengajuan->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }} sampai dengan
+                        {{ \Carbon\Carbon::parse($pengajuan->tanggal_selesai)->locale('id')->translatedFormat('d F Y') }}
+                    @endif
                     <br>dengan hasil <strong>B (Baik)</strong>
                 </td>
             </tr>

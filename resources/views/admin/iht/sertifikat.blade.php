@@ -111,8 +111,14 @@
         <strong>IN HOUSE TRAINING</strong>
         <br> <strong>{{ $iht->judul }}</strong>
     </div>
-    <div class="tanggal">{{ \Carbon\Carbon::parse($iht->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }} sampai
-        {{ \Carbon\Carbon::parse($iht->tanggal_selesai)->locale('id')->translatedFormat('d F Y') }}</div>
+    <div class="tanggal">
+        @if ($iht->tanggal_mulai === $iht->tanggal_selesai)
+            {{ \Carbon\Carbon::parse($iht->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }}
+        @else
+            {{ \Carbon\Carbon::parse($iht->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }} sampai
+            {{ \Carbon\Carbon::parse($iht->tanggal_selesai)->locale('id')->translatedFormat('d F Y') }}
+        @endif
+    </div>
     </div>
     <div class="ttd" style="padding-left: 20mm;">
         <table style="text-align: center;">

@@ -26,10 +26,10 @@
         </table>
 
         <div class="form-group mt-3">
-            <label for="materi_file">Upload Materi (PDF atau ZIP):</label>
-            <input type="file" name="materi_file" class="form-control" accept=".pdf,.zip">
-            @if ($iht->materi_file)
-            <p class="mt-2">File saat ini: <a href="{{ asset('storage/' . $iht->materi_file) }}" target="_blank">Lihat
+            <label for="file_dokumentasi">Upload File Dokumentasi:</label>
+            <input type="file" name="file_dokumentasi" class="form-control" accept=".pdf,.zip">
+            @if ($iht->file_dokumentasi)
+            <p class="mt-2">File saat ini: <a href="{{ asset('storage/' . $iht->file_dokumentasi) }}" target="_blank">Lihat
                     Materi</a></p>
             @endif
         </div>

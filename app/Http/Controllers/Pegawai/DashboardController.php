@@ -10,7 +10,7 @@ use App\Models\Pegawai;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function indexPegawai()
     {
         $pegawai = Auth::user()->pegawai;
 

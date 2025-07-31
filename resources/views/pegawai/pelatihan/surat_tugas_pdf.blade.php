@@ -159,12 +159,18 @@
             <tr>
                 <td width="80">Hari</td>
                 <td width="5">:</td>
-                <td>{{ \Carbon\Carbon::parse($pelatihan->tanggal_mulai)->translatedFormat('l') }}</td>
+                <td>{{ \Carbon\Carbon::parse($pelatihan->tanggal_mulai)->locale('id')->translatedFormat('l') }}</td>
             </tr>
             <tr>
                 <td>Tanggal</td>
                 <td>:</td>
-                <td>{{ \Carbon\Carbon::parse($pelatihan->tanggal_mulai)->format('d-m-Y') }} s.d. {{ \Carbon\Carbon::parse($pelatihan->tanggal_selesai)->format('d-m-Y') }}</td>
+                <td>
+                    @if($pelatihan->tanggal_mulai === $pelatihan->tanggal_selesai)
+                        {{ \Carbon\Carbon::parse($pelatihan->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }}
+                    @else
+                        {{ \Carbon\Carbon::parse($pelatihan->tanggal_mulai)->translatedFormat('d F Y') }} s.d. {{ \Carbon\Carbon::parse($pelatihan->tanggal_selesai)->translatedFormat('d F Y') }}
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td style="vertical-align: top">Tempat</td>

@@ -11,6 +11,7 @@
 <div class="mb-3"> <label>Tanggal Selesai</label> <input type="date" name="tanggal_selesai"
         value="{{ old('tanggal_selesai', $iht->tanggal_selesai ?? '') }}" class="form-control" required> </div>
 <div class="mb-3"> <label>Upload Materi</label> <input type="file" name="file_materi" class="form-control"> </div>
-<div class="mb-3"> <label>Upload Dokumentasi</label> <input type="file" name="file_dokumentasi" class="form-control">
-</div> <button class="btn btn-success">{{ $submit }}</button> <a href="{{ route('admin.iht.index') }}"
+{{-- <div class="mb-3"> <label>Upload Dokumentasi</label> <input type="file" name="file_dokumentasi" class="form-control">
+</div>  --}}
+<button class="btn btn-success">{{ $submit }}</button> <a href="{{ route('admin.iht.index') }}"
     class="btn btn-secondary">Batal</a>

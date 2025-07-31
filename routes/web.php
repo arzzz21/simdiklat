@@ -56,10 +56,10 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     // Route::get('/admin', fn () => view('admin.dashboard'));
-    Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin', [AdminDashboardController::class, 'indexAdmin'])->name('admin.dashboard');
     // Route::get('/dosen', fn () => view('dosen.dashboard'));
-    Route::get('/dosen', [DosenDashboardController::class, 'index'])->name('dosen.dashboard');
-    Route::get('/pegawai', [PegawaiDashboardController::class, 'index'])->name('pegawai.dashboard');
+    Route::get('/dosen', [DosenDashboardController::class, 'indexDosen'])->name('dosen.dashboard');
+    Route::get('/pegawai', [PegawaiDashboardController::class, 'indexPegawai'])->name('pegawai.dashboard');
 });
 
 Route::get('/redirect-after-login', function () {

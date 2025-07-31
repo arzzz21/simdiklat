@@ -145,9 +145,9 @@ class IhtController extends Controller
         $iht->pesertas()->whereNotIn('id', $request->hadir ?? [])->update(['hadir' => false]);
 
         // upload materi
-        if ($request->hasFile('materi_file')) {
-            $path = $request->file('materi_file')->store('materi_iht', 'public');
-            $iht->update(['materi_file' => $path]);
+        if ($request->hasFile('file_dokumentasi')) {
+            $path = $request->file('file_dokumentasi')->store('dokumentasi-iht', 'public');
+            $iht->update(['file_dokumentasi' => $path]);
         }
 
         return redirect()->route('admin.iht.index')->with('success', 'Presensi dan materi berhasil disimpan.');
