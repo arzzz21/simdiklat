@@ -44,11 +44,11 @@
         </thead>
         <tbody> @foreach ($data as $i => $item) <tr>
                 <td>{{ $i + 1 }}</td>
-                <td>{{ $item->judul }}</td>
+                <td>{{ $item->nama }}</td>
                 <td>{{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d-m-Y') }} s/d
                     {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d-m-Y') }}</td>
                 <td>{{ $item->tempat }}</td>
-                <td> @foreach ($item->pesertas as $peserta) {{ $peserta->pegawai->nama }}<br> @endforeach </td>
+                <td> @foreach ($item->peserta as $peserta) {{ $peserta->nama }}<br> @endforeach </td>
             </tr> @endforeach </tbody>
     </table>
 </body>

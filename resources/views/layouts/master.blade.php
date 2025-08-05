@@ -12,7 +12,7 @@
 <body data-sidebar="dark">
     <div id="layout-wrapper">
         @include('layouts.sidebar')
-        
+
         <div class="main-content">
             @include('layouts.navbar')
             <div class="page-content">
@@ -28,9 +28,9 @@
                             <script>document.write(new Date().getFullYear())</script> © Skote Theme.
                         </div>
                         <div class="col-sm-6">
-                            <div class="text-sm-end d-none d-sm-block">
+                            {{-- <div class="text-sm-end d-none d-sm-block">
                                 Design & Develop with &hearts; by Arzzz
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

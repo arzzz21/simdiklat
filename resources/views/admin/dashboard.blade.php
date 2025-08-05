@@ -76,7 +76,7 @@
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5>Pelatihan Luar RS / Bulan</h5>
+                    <h5>Pelatihan Eksternal</h5>
                     <a href="{{ route('admin.laporan.pelatihan') }}" class="btn btn-primary">
                         <i class="mdi mdi-file-document-box"></i> Laporan Pelatihan Luar RS
                     </a>
@@ -89,7 +89,7 @@
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5>Kegiatan IHT / Bulan</h5>
+                    <h5>Pelatihan Internal</h5>
                     <a href="{{ route('admin.laporan.iht') }}" class="btn btn-primary">
                         <i class="mdi mdi-file-document-box"></i> Laporan IHT
                     </a>

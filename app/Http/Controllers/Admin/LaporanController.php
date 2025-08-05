@@ -52,7 +52,7 @@ class LaporanController extends Controller
 
     public function exportPelatihan(Request $request)
     {
-        $query = Pelatihan::with('pesertas.pegawai');
+        $query = Pelatihan::with('peserta');
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('tanggal_mulai', [$request->start_date, $request->end_date]);
         }
