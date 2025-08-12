@@ -15,7 +15,9 @@
                     <td>{{ $item->alamat }}</td>
                     <td>
                         <a href="{{ route('kampus.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('kampus.destroy', $item->id) }}" method="POST" class="d-inline">@csrf @method('DELETE')
+                        <form action="{{ route('kampus.destroy', $item->id) }}" method="POST" class="d-inline">
+                            @csrf 
+                            @method('DELETE')
                             <button onclick="return confirm('Yakin hapus?')" class="btn btn-danger btn-sm">Hapus</button>
                         </form>
                     </td>

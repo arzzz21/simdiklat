@@ -33,8 +33,8 @@ class KampusController extends Controller
         return redirect()->route('kampus.index')->with('success', 'Data kampus diperbarui');
     }
 
-    public function destroy(Kampus $kampus) {
-        $kampus->delete();
-        return redirect()->route('kampus.index')->with('success', 'Data kampus dihapus');
+    public function destroy(Kampus $kampu) {
+        $kampu->delete();
+        return back()->with('success', 'Data Kampus Berhasil dihapus.');
     }
 }

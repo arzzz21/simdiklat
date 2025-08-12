@@ -16,4 +16,8 @@ class Unit extends Model
     {
         return $this->hasMany(Jabatan::class);
     }
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
 }

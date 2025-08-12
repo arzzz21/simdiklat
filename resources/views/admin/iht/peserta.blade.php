@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="container mt-4">
+<div class="container-fluid">
     <h4>Peserta IHT: {{ $iht->judul }}</h4>
     <form action="{{ route('admin.iht.peserta.tambah', $iht->id) }}" method="POST" class="row g-2 mb-3">
         @csrf

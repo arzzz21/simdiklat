@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Jabatan extends Model
 {
-    protected $fillable = ['nama', 'is_manajer'];
+    protected $fillable = ['nama', 'is_manajer', 'unit_id'];
     public function unit()
     {
         return $this->belongsTo(Unit::class);

@@ -142,7 +142,17 @@
         <tr>
             <td width="150" style="vertical-align: top;">Nama</td>
             <td style="vertical-align: top;">:</td>
-            <td><ol> @foreach($pengajuan->mahasiswas as $mhs) <li>{{ $mhs->nama }}</li> @endforeach </ol></td>
+            <td>
+                @if($pengajuan->mahasiswas->count() > 1)
+                    <ol>
+                        @foreach($pengajuan->mahasiswas as $mhs)
+                            <li>{{ $mhs->nama }}</li>
+                        @endforeach
+                    </ol>
+                @else
+                    {{ $pengajuan->mahasiswas->first()->nama ?? '-' }}
+                @endif
+            </td>
         </tr>
         <tr>
             <td width="150">Nama Pembimbing</td>

@@ -89,5 +89,20 @@ class PelatihanController extends Controller
 
         return redirect()->route('admin.pelatihan.index')->with('success', 'Pelatihan berhasil diperbarui.');
     }
+    public function destroy(Pelatihan $pelatihan)
+    {
+        // Hapus file_info jika ada
+        if ($pelatihan->file_info && Storage::exists('public/' . $pelatihan->file_info)) {
+            Storage::delete('public/' . $pelatihan->file_info);
+        }
+
+        // Hapus relasi peserta
+        $pelatihan->peserta()->detach();
+
+        // Hapus data pelatihan
+        $pelatihan->delete();
+
+        return redirect()->route('admin.pelatihan.index')->with('success', 'Pelatihan berhasil dihapus.');
+    }
 
 }

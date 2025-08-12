@@ -165,6 +165,8 @@ Route::get('/dosen/pengajuan/{pengajuan}/sertifikat/download', [SertifikatContro
     //INPUT PELATIHAN
     Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
         Route::resource('pelatihan', AdminPelatihanController::class);
+        Route::delete('/pelatihan/{pelatihan}', [AdminPelatihanController::class, 'destroy'])->name('pelatihan.destroy');
+
     });
 
     //CETAK SURAT TUGAS
