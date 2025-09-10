@@ -28,6 +28,28 @@ class IhtController extends Controller
 
     public function store(Request $request)
     {
+        // $data = $request->validate([
+        //     'judul' => 'required|string|max:255',
+        //     'deskripsi' => 'nullable|string',
+        //     'tempat' => 'required|string',
+        //     'instruktur' => 'nullable|string',
+        //     'tanggal_mulai' => 'required|date',
+        //     'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+        //     'file_materi' => 'nullable|file|mimes:pdf,docx,jpg,png',
+        //     'file_dokumentasi' => 'nullable|file|mimes:pdf,docx,jpg,png',
+        // ]);
+
+        // // Simpan file jika ada
+        // if ($request->hasFile('file_materi')) {
+        //     $data['file_materi'] = $request->file('file_materi')->store('materi-iht');
+        // }
+        // if ($request->hasFile('file_dokumentasi')) {
+        //     $data['file_dokumentasi'] = $request->file('file_dokumentasi')->store('dokumentasi-iht');
+        // }
+
+        // $iht = Iht::create($data);
+
+        // return redirect()->route('admin.iht.index')->with('success', 'IHT berhasil ditambahkan.');
         $data = $request->validate([
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
@@ -39,12 +61,20 @@ class IhtController extends Controller
             'file_dokumentasi' => 'nullable|file|mimes:pdf,docx,jpg,png',
         ]);
 
+        // Buat folder jika belum ada
+        if (!Storage::disk('public')->exists('materi-iht')) {
+            Storage::disk('public')->makeDirectory('materi-iht');
+        }
+        if (!Storage::disk('public')->exists('dokumentasi-iht')) {
+            Storage::disk('public')->makeDirectory('dokumentasi-iht');
+        }
+
         // Simpan file jika ada
         if ($request->hasFile('file_materi')) {
-            $data['file_materi'] = $request->file('file_materi')->store('materi-iht');
+            $data['file_materi'] = $request->file('file_materi')->store('materi-iht', 'public');
         }
         if ($request->hasFile('file_dokumentasi')) {
-            $data['file_dokumentasi'] = $request->file('file_dokumentasi')->store('dokumentasi-iht');
+            $data['file_dokumentasi'] = $request->file('file_dokumentasi')->store('dokumentasi-iht', 'public');
         }
 
         $iht = Iht::create($data);

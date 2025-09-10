@@ -25,7 +25,7 @@
             <a href="{{ asset('storage/' . $laporan->file_laporan) }}" target="_blank">Lihat</a>
         </p>
         <p><strong>Surat Tugas TTD:</strong>
-            <a href="{{ asset('storage/' . $laporan->file_surat) }}" target="_blank">Lihat</a>
+            <a href="{{ asset('storage/' . $laporan->file_surat_tugas) }}" target="_blank">Lihat</a>
         </p>
 
         <form action="{{ route('manajer.laporan.verifikasi', $laporan->id) }}" method="POST" class="mt-4">
