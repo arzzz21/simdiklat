@@ -86,6 +86,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::resource('fakultas', FakultasController::class);
 });
+Route::get('/admin/get-fakultas-by-kampus/{kampus_id}', [DosenController::class, 'getFakultasByKampus']);
 
 //MAHASISWA
 Route::resource('mahasiswa', MahasiswaController::class)->middleware('auth');

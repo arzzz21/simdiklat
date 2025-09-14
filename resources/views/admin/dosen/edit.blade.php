@@ -26,7 +26,7 @@
                     </div>
                     <div class="mb-3">
                         <label>Kampus</label>
-                        <select name="kampus_id" class="form-control" required>
+                        <select name="kampus_id" id="kampus" class="form-control" required>
                             @foreach($kampus as $k)
                                 <option value="{{ $k->id }}" {{ $dosen->kampus_id == $k->id ? 'selected' : '' }}>{{ $k->nama }}</option>
                             @endforeach
@@ -34,7 +34,7 @@
                     </div>
                     <div class="mb-3">
                         <label>Fakultas</label>
-                        <select name="fakultas_id" class="form-control" required>
+                        <select name="fakultas_id" id="fakultas" class="form-control" required>
                             @foreach($fakultas as $f)
                                 <option value="{{ $f->id }}" {{ $dosen->fakultas_id == $f->id ? 'selected' : '' }}>{{ $f->nama }}</option>
                             @endforeach
@@ -51,4 +51,26 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#kampus').on('change', function () {
+        var kampusID = $(this).val();
+        $('#fakultas').html('<option value="">Memuat...</option>');
+
+        if(kampusID) {
+            $.ajax({
+                url: '/admin/get-fakultas-by-kampus/' + kampusID,
+                type: 'GET',
+                success: function (data) {
+                    $('#fakultas').empty().append('<option value="">-- Pilih Fakultas --</option>');
+                    $.each(data, function (key, value) {
+                        $('#fakultas').append('<option value="' + value.id + '">' + value.nama + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#fakultas').html('<option value="">-- Pilih Fakultas --</option>');
+        }
+    });
+</script>
 @endsection

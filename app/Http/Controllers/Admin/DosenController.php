@@ -48,7 +48,7 @@ class DosenController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'kampus_id' => $request->kampus_id,
-            'fakultas_id' => $request->fakultas,
+            'fakultas_id' => $request->fakultas_id,
         ]);
 
         $user->assignRole('dosen');
@@ -59,7 +59,7 @@ class DosenController extends Controller
     public function edit(User $dosen)
     {
         $kampus = Kampus::all();
-        $fakultas = Fakultas::all();
+        $fakultas = Fakultas::where('kampus_id',$dosen->kampus_id)->get();
         return view('admin.dosen.edit', compact('dosen', 'kampus','fakultas'));
     }
 
@@ -72,7 +72,7 @@ class DosenController extends Controller
             'fakultas_id' => 'required',
         ]);
 
-        $dosen->update($request->only('name', 'email', 'kampus_id', 'fakultas'));
+        $dosen->update($request->only('name', 'email', 'kampus_id', 'fakultas_id'));
 
         if ($request->filled('password')) {
             $dosen->update(['password' => Hash::make($request->password)]);
@@ -80,4 +80,11 @@ class DosenController extends Controller
 
         return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil diupdate.');
     }
+
+    public function getFakultasByKampus($kampus_id)
+    {
+        $fakultas = Fakultas::where('kampus_id', $kampus_id)->get();
+        return response()->json($fakultas);
+    }
+
 }
