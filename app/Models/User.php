@@ -53,6 +53,11 @@ class User extends Authenticatable
         return $this->belongsTo(Kampus::class);
     }
 
+    public function fakultas()
+    {
+        return $this->belongsTo(Fakultas::class);
+    }
+
     public function pegawai()
     {
         return $this->hasOne(\App\Models\Pegawai::class, 'user_id');

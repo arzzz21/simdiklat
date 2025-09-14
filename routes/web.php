@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KampusController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\JenisProgramController;
 use App\Http\Controllers\Admin\DosenController;
 use App\Http\Controllers\Admin\PengajuanController as AdminPengajuanController;
@@ -73,11 +74,17 @@ Route::get('/redirect-after-login', function () {
 //RESOURCE ROUTE
 Route::resource('kampus', KampusController::class);
 Route::resource('mahasiswa', MahasiswaController::class);
+Route::resource('fakultas', FakultasController::class);
 Route::resource('jenis-program', JenisProgramController::class);
 
 //KAMPUS
 Route::middleware('auth')->group(function () {
     Route::resource('kampus', KampusController::class);
+});
+
+//FAKULTAS
+Route::middleware('auth')->group(function () {
+    Route::resource('fakultas', FakultasController::class);
 });
 
 //MAHASISWA

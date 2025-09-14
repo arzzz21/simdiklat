@@ -34,8 +34,16 @@
                     </div>
                     <div class="mb-3">
                         <label>Fakultas</label>
-                        <input type="text" name="fakultas" value="{{ $dosen->fakultas }}" class="form-control" required>
+                        <select name="fakultas_id" class="form-control" required>
+                            @foreach($fakultas as $f)
+                                <option value="{{ $f->id }}" {{ $dosen->fakultas_id == $f->id ? 'selected' : '' }}>{{ $f->nama }}</option>
+                            @endforeach
+                        </select>
                     </div>
+                    {{-- <div class="mb-3">
+                        <label>Fakultas</label>
+                        <input type="text" name="fakultas" value="{{ $dosen->fakultas }}" class="form-control" required>
+                    </div> --}}
                     <button class="btn btn-primary">Update</button>
                     <a href="{{ route('admin.dosen.index') }}" class="btn btn-secondary">Batal</a>
                 </form>

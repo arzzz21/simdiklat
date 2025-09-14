@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Kampus;
+use App\Models\Fakultas;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -28,7 +29,8 @@ class DosenController extends Controller
     public function create()
     {
         $kampus = Kampus::all();
-        return view('admin.dosen.create', compact('kampus'));
+        $fakultas = Fakultas::all();
+        return view('admin.dosen.create', compact('kampus','fakultas'));
     }
 
     public function store(Request $request)
@@ -38,7 +40,7 @@ class DosenController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
             'kampus_id' => 'required',
-            'fakultas' => 'required',
+            'fakultas_id' => 'required',
         ]);
 
         $user = User::create([
@@ -46,7 +48,7 @@ class DosenController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'kampus_id' => $request->kampus_id,
-            'fakultas' => $request->fakultas,
+            'fakultas_id' => $request->fakultas,
         ]);
 
         $user->assignRole('dosen');
@@ -57,7 +59,8 @@ class DosenController extends Controller
     public function edit(User $dosen)
     {
         $kampus = Kampus::all();
-        return view('admin.dosen.edit', compact('dosen', 'kampus'));
+        $fakultas = Fakultas::all();
+        return view('admin.dosen.edit', compact('dosen', 'kampus','fakultas'));
     }
 
     public function update(Request $request, User $dosen)
@@ -66,7 +69,7 @@ class DosenController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $dosen->id,
             'kampus_id' => 'required',
-            'fakultas' => 'required',
+            'fakultas_id' => 'required',
         ]);
 
         $dosen->update($request->only('name', 'email', 'kampus_id', 'fakultas'));
