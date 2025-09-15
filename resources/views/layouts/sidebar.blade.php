@@ -42,6 +42,7 @@
                 @role('admin')
                 <li><a href="{{ route('kampus.index') }}"><i class="bx bx-building"></i><span>Kampus</span></a></li>
                 <li><a href="{{ route('fakultas.index') }}"><i class="bx bx-carousel"></i><span>Fakultas</span></a></li>
+                <li><a href="{{ route('prodi.index') }}"><i class="bx bx-columns"></i><span>Program Studi</span></a></li>
                 <li><a href="{{ route('jenis-program.index') }}"><i class="bx bx-clipboard"></i><span>Jenis Program</span></a></li>
                 @endrole
 

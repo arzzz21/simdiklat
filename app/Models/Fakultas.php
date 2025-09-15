@@ -12,4 +12,10 @@ class Fakultas extends Model
     public function kampus() {
         return $this->belongsTo(Kampus::class);
     }
+
+    public function prodi()
+    {
+        return $this->hasMany(Prodi::class);
+    }
 }
+
