@@ -8,4 +8,9 @@ class Kampus extends Model
 {
     protected $table = 'kampus';
     protected $fillable = ['nama', 'alamat'];
+
+    public function fakultas()
+    {
+        return $this->hasMany(Fakultas::class);
+    }
 }

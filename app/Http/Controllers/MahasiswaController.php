@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Mahasiswa;
 use App\Models\Kampus;
+use App\Models\Fakultas;
+use App\Models\Prodi;
 
 class MahasiswaController extends Controller
 {
     public function index()
     {
-        $query = Mahasiswa::with('kampus');
+        $query = Mahasiswa::with('kampus', 'prodi');
         if (auth()->user()->hasRole('dosen')) {
             $query->where('user_id', auth()->id());
         }
@@ -22,11 +24,14 @@ class MahasiswaController extends Controller
     public function create()
     {
         $kampus = Kampus::all();
-        return view('mahasiswa.create', compact('kampus'));
+        $prodi = Prodi::all();
+        return view('mahasiswa.create', compact('kampus', 'prodi'));
     }
 
     public function store(Request $request)
     {
+        // print_r($request->all());
+        // die();
         $request->validate([
             'nama' => 'required', 'nim' => 'required',
             'kampus_id' => 'required|exists:kampus,id'
@@ -36,7 +41,7 @@ class MahasiswaController extends Controller
             'kampus_id' => $request->kampus_id,
             'nama' => $request->nama,
             'nim' => $request->nim,
-            'prodi' => $request->prodi,
+            'prodi_id' => $request->prodi_id,
             'no_hp' => $request->no_hp,
         ]);
         return redirect()->route('mahasiswa.index')->with('success', 'Mahasiswa ditambahkan');
@@ -46,12 +51,13 @@ class MahasiswaController extends Controller
     {
         // $this->authorize('update', $mahasiswa); // optional if using policy
         $kampus = Kampus::all();
-        return view('mahasiswa.edit', compact('mahasiswa', 'kampus'));
+        $prodi = Prodi::all();
+        return view('mahasiswa.edit', compact('mahasiswa', 'kampus', 'prodi'));
     }
 
     public function update(Request $request, Mahasiswa $mahasiswa)
     {
-        $mahasiswa->update($request->only('kampus_id', 'nama', 'nim', 'prodi', 'no_hp'));
+        $mahasiswa->update($request->only('kampus_id', 'nama', 'nim', 'prodi_id', 'no_hp'));
         return redirect()->route('mahasiswa.index')->with('success', 'Data diperbarui');
     }
 
@@ -59,5 +65,13 @@ class MahasiswaController extends Controller
     {
         $mahasiswa->delete();
         return redirect()->route('mahasiswa.index')->with('success', 'Data dihapus');
+    }
+
+    public function getProdiByKampus($kampus_id)
+    {
+        $prodi = Prodi::whereIn('fakultas_id', function ($q) use ($kampus_id) {
+            $q->select('id')->from('fakultas')->where('kampus_id', $kampus_id);
+        })->get();
+        return response()->json($prodi);
     }
 }

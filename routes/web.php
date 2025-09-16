@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KampusController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\FakultasController;
+use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\JenisProgramController;
 use App\Http\Controllers\Admin\DosenController;
 use App\Http\Controllers\Admin\PengajuanController as AdminPengajuanController;
@@ -75,6 +76,7 @@ Route::get('/redirect-after-login', function () {
 Route::resource('kampus', KampusController::class);
 Route::resource('mahasiswa', MahasiswaController::class);
 Route::resource('fakultas', FakultasController::class);
+Route::resource('prodi', ProdiController::class);
 Route::resource('jenis-program', JenisProgramController::class);
 
 //KAMPUS
@@ -87,6 +89,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('fakultas', FakultasController::class);
 });
 Route::get('/admin/get-fakultas-by-kampus/{kampus_id}', [DosenController::class, 'getFakultasByKampus']);
+
+//PRODI
+Route::middleware('auth')->group(function () {
+    Route::resource('prodi', ProdiController::class);
+});
+Route::get('/admin/get-prodi-by-kampus/{kampus_id}', [MahasiswaController::class, 'getProdiByKampus']);
 
 //MAHASISWA
 Route::resource('mahasiswa', MahasiswaController::class)->middleware('auth');

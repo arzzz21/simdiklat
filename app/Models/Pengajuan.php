@@ -37,6 +37,11 @@ class Pengajuan extends Model
         return $this->belongsToMany(Mahasiswa::class, 'pengajuan_mahasiswa');
     }
 
+    public function prodi()
+    {
+        return $this->belongsToMany(Prodi::class);
+    }
+
     public function verifikator()
     {
         return $this->belongsTo(User::class, 'diverifikasi_oleh');
