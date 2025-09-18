@@ -11,7 +11,7 @@
 
     @foreach($pengajuans as $p)
     <div class="border p-3 mb-4 rounded shadow-sm">
-      <h6>{{ $p->user->name }} - {{ $p->jenisProgram->nama }} ({{ $p->program_studi }})</h6>
+      <h6>{{ $p->user->name }} - {{ $p->jenisProgram->nama }} ({{ $p->prodi->jenjang }}-{{ $p->prodi->nama }})</h6>
       <p><strong>Periode:</strong> {{ $p->tanggal_mulai }} s/d {{ $p->tanggal_selesai }}</p>
 
       <table class="table table-bordered">

@@ -32,9 +32,18 @@
             </div>
 
             {{-- Program Studi --}}
-            <div class="mb-3">
+            {{-- <div class="mb-3">
                 <label for="program_studi">Program Studi</label>
                 <input type="text" name="program_studi" class="form-control" value="{{ $pengajuan->program_studi }}" required>
+            </div> --}}
+            <div class="mb-3">
+                <label>Program Studi</label>
+                <select name="prodi_id" id="prodi" class="form-control" required>
+                    <option value="">-- Pilih Program Studi --</option>
+                    @foreach($prodi as $f)
+                        <option value="{{ $f->id }}" {{ $pengajuan->prodi_id == $f->id ? 'selected' : '' }}>{{ $f->jenjang.'-'.$f->nama }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="mb-3">
@@ -84,36 +93,128 @@
         </form>
     </div>
 </div>
-@endsection
-@push('scripts')
-{{-- Select2 --}}
+
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    // $('#prodi').on('change', function () {
+    //     var prodiID = $(this).val();
+    //     $('#mahasiswa-select').html('<option value="">Memuat...</option>');
+
+    //     if(prodiID) {
+    //         $('#mahasiswa-list').empty();
+    //         $('#mahasiswa-hidden-inputs').empty();
+    //         $.ajax({
+    //             url: '/admin/get-mahasiswa-by-prodi/' + prodiID,
+    //             type: 'GET',
+    //             success: function (data) {
+    //                 $('#mahasiswa-select').empty().append('<option value="">-- Pilih Mahasiswa --</option>');
+    //                 $.each(data, function (key, value) {
+    //                     $('#mahasiswa-select').append('<option value="' + value.id + '">' + value.nama + ' - ' + value.nim + '</option>');
+    //                 });
+    //                 $('#mahasiswa-select').val(null).trigger('change.select2');
+    //             }
+    //         });
+    //     } else {
+    //         $('#mahasiswa-select').html('<option value="">-- Pilih Mahasiswa --</option>');
+    //         $('#mahasiswa-select').val(null).trigger('change');
+    //     }
+    // });
+
+    // $(document).ready(function () {
+    //     $('#mahasiswa-select').select2();
+    //     $('#btn-tambah').on('click', function () {
+    //         const selectedId = $('#mahasiswa-select').val();
+    //         const selectedText = $('#mahasiswa-select option:selected').text();
+    //         if (!selectedId) return;
+    //         if ($('#mhs-item-' + selectedId).length === 0) {
+    //             $('#mahasiswa-list').append(
+    //                 ` <li class="list-group-item d-flex justify-content-between align-items-center" id="mhs-item-${selectedId}"> ${selectedText} <button type="button" class="btn btn-danger btn-sm remove-mahasiswa" data-id="${selectedId}">Hapus</button> </li> `
+    //                 );
+    //             $('#mahasiswa-hidden-inputs').append(
+    //                 ` <input type="hidden" name="mahasiswa_ids[]" value="${selectedId}" id="mhs-input-${selectedId}"> `
+    //                 );
+    //         }
+    //         // reset
+    //         $('#mahasiswa-select').val(null).trigger('change.select2');
+    //     });
+    //     $(document).on('click', '.remove-mahasiswa', function () {
+    //         const id = $(this).data('id');
+    //         $('#mhs-item-' + id).remove();
+    //         $('#mhs-input-' + id).remove();
+    //     });
+    // });
     $(document).ready(function () {
-                $('#mahasiswa-select').select2();
-                $('#btn-tambah').on('click', function () {
-                    const selectedId = $('#mahasiswa-select').val();
-                    const selectedText = $('#mahasiswa-select option:selected').text();
-                    if (!selectedId) return;
-                    if ($('#mhs-item-' + selectedId).length === 0) {
-                        $('#mahasiswa-list').append(
-                            ` <li class="list-group-item d-flex justify-content-between align-items-center" id="mhs-item-${selectedId}"> ${selectedText} <button type="button" class="btn btn-danger btn-sm remove-mahasiswa" data-id="${selectedId}">Hapus</button> </li> `
-                            );
-                        $('#mahasiswa-hidden-inputs').append(
-                            ` <input type="hidden" name="mahasiswa_ids[]" value="${selectedId}" id="mhs-input-${selectedId}"> `
-                            );
-                    }
-                    // reset
-                    select $('#mahasiswa-select').val(null).trigger('change');
-                });
-                $(document).on('click', '.remove-mahasiswa', function () {
-                    const id = $(this).data('id'); $('#mhs-item-' + id).remove();
-                    $('#mhs-input-' + id).remove();
-                });
+        $('#mahasiswa-select').select2({
+            placeholder: "-- Cari Mahasiswa --",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+    $('#prodi').on('change', function () {
+        var prodiID = $(this).val();
+
+        // Kosongkan daftar mahasiswa terpilih juga
+        $('#mahasiswa-list').empty();
+        $('#mahasiswa-hidden-inputs').empty();
+
+        if (prodiID) {
+            // Set opsi loading dulu
+            var loadingOption = new Option("Memuat...", "", false, false);
+            $('#mahasiswa-select').empty().append(loadingOption).trigger('change');
+
+            $.ajax({
+                url: '/admin/get-mahasiswa-by-prodi/' + prodiID,
+                type: 'GET',
+                success: function (data) {
+                    $('#mahasiswa-select').empty().append(new Option("-- Pilih Mahasiswa --", "", false, false));
+
+                    data.forEach(function (item) {
+                        var option = new Option(item.nama + " - " + item.nim, item.id, false, false);
+                        $('#mahasiswa-select').append(option);
+                    });
+
+                    // Reset selected value dan refresh select2
+                    $('#mahasiswa-select').val(null).trigger('change');
+                },
+                error: function() {
+                    $('#mahasiswa-select').empty().append(new Option("-- Gagal Memuat --", "", false, false)).trigger('change');
+                }
             });
+        } else {
+            $('#mahasiswa-select').empty().append(new Option("-- Pilih Mahasiswa --", "", false, false)).trigger('change');
+        }
+    });
+    $('#btn-tambah').on('click', function () {
+        const selectedId = $('#mahasiswa-select').val();
+        const selectedText = $('#mahasiswa-select option:selected').text();
+
+        if (!selectedId) {
+            alert('Pilih mahasiswa terlebih dahulu!');
+            return;
+        }
+
+        if ($('#mhs-item-' + selectedId).length === 0) {
+            $('#mahasiswa-list').append(
+                `<li class="list-group-item d-flex justify-content-between align-items-center" id="mhs-item-${selectedId}">` +
+                `${selectedText}` +
+                `<button type="button" class="btn btn-danger btn-sm remove-mahasiswa" data-id="${selectedId}">Hapus</button></li>`
+            );
+            $('#mahasiswa-hidden-inputs').append(
+                `<input type="hidden" name="mahasiswa_ids[]" value="${selectedId}" id="mhs-input-${selectedId}">`
+            );
+        }
+
+        // Reset select2 value setelah tambah
+        $('#mahasiswa-select').val(null).trigger('change');
+    });
+    $(document).on('click', '.remove-mahasiswa', function () {
+        const id = $(this).data('id');
+        $('#mhs-item-' + id).remove();
+        $('#mhs-input-' + id).remove();
+    });
 
 </script>
-@endpush
+@endsection

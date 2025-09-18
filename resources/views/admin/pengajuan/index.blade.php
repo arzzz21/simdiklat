@@ -29,7 +29,7 @@
           <td>
             <strong>{{ $p->jenisProgram->nama }}</strong><br>
             <small><strong>Dosen : </strong>{{ $p->user->name }}</small><br>
-            <small><strong>Prodi : </strong>{{ $p->program_studi }}</small><br>
+            <small><strong>Prodi : </strong>{{ $p->prodi->jenjang }}-{{ $p->prodi->nama }}</small><br>
             <small><strong>Waktu : </strong>{{ $p->tanggal_mulai }} s/d {{ $p->tanggal_selesai }}</small>
           </td>
           <td>

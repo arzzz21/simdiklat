@@ -65,10 +65,8 @@
                         </td>
                         <td style="max-width: 100px;">
                             <div class="d-flex flex-wrap gap-1">
-                            @if ($item->status === ['diajukan','ditolak'])
+                            @if (in_array($item->status, ['diajukan', 'ditolak']))
                                 <a href="{{ route('dosen.pengajuan.edit', $item->id) }}" class="btn btn-sm btn-warning stop-click">Edit</a>
-                            {{-- @else
-                                <button class="btn btn-sm btn-secondary" disabled>Edit</button> --}}
                             @endif
 
                             @if ($item->status == 'diterima')
@@ -79,10 +77,10 @@
                                 <a href="{{ route('dosen.pengajuan.berkas', $item->id) }}" class="btn btn-sm btn-danger stop-click">
                                 Perbaiki Berkas
                                 </a>
-                            @elseif ($item->status == 'diajukan')
+                            {{-- @elseif ($item->status == 'diajukan')
                                 <span class="badge bg-warning">Menunggu Verifikasi</span>
                             @elseif ($item->status == 'ditolak')
-                                <span class="badge bg-danger">Ditolak</span>
+                                <span class="badge bg-danger">Ditolak</span> --}}
                             @endif
 
                             @if ($item->invoice && $item->status !== 'selesai')
@@ -117,7 +115,7 @@
                             </div>
                             <div class="modal-body">
                                 <p><strong>Jenis Program:</strong> {{ $item->jenisProgram->nama }}</p>
-                                <p><strong>Program Studi:</strong> {{ $item->program_studi }}</p>
+                                <p><strong>Program Studi:</strong> {{ $item->prodi->jenjang }}-{{ $item->prodi->nama }}</p>
                                 <p><strong>Tanggal:</strong> {{ $item->tanggal_mulai }} s/d {{ $item->tanggal_selesai }}</p>
                                 <p><strong>Status:</strong> {{ $item->status }}</p>
                                 <p><strong>Mahasiswa:</strong></p>

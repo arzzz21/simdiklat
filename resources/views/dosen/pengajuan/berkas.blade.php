@@ -11,6 +11,15 @@
         {{ $pengajuan->catatan_berkas ?? 'Berkas Anda perlu diperbaiki. Silakan upload ulang sesuai petunjuk.' }}
     </div>
 @endif
+<div class="alert alert-danger">
+    <strong>Berkas 1 mahasiswa terdiri dari :</strong><br>
+    <ul>
+        <li>Surat Permohonan Magang</li>
+        <li>Kartu Identitas</li>
+        <li>Surat Keterangan Sehat</li>
+        <li>Surat Ijin Orang Tua</li>
+    </ul>
+</div>
 <div class="card">
   <div class="card-header">
     <h5>Upload Berkas Pengajuan</h5>

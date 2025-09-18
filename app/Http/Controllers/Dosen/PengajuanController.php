@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Pengajuan;
 use App\Models\JenisProgram;
 use App\Models\Mahasiswa;
+use App\Models\Fakultas;
+use App\Models\Prodi;
+use App\Models\User;
 
 class PengajuanController extends Controller
 {
@@ -22,14 +25,28 @@ class PengajuanController extends Controller
     public function create()
     {
         $jenis_programs = JenisProgram::all();
-        $mahasiswas = Mahasiswa::where('user_id', Auth::id())->get();
-        return view('dosen.pengajuan.create', compact('jenis_programs', 'mahasiswas'));
+        // $mahasiswas = Mahasiswa::where('user_id', Auth::id())->get();
+        $fakultas = Auth::user()->fakultas;
+        $prodi_ids = $fakultas->prodi->pluck('id');
+        $mahasiswas = Mahasiswa::whereIn('prodi_id', $prodi_ids)->get();
+
+        $prodi = Auth::user()->fakultas->prodi;
+        // print_r($mahasiswas);
+        // die();
+        return view('dosen.pengajuan.create', compact('jenis_programs', 'mahasiswas', 'prodi'));
+    }
+    public function getMahasiswaByProdi($prodi_id)
+    {
+        $mahasiswas = Mahasiswa::where('prodi_id', $prodi_id)->get();
+        return response()->json($mahasiswas);
     }
     public function store(Request $request)
     {
+        // print_r($request->all());
+        // die();
         $request->validate([
             'jenis_program_id' => 'required|exists:jenis_programs,id',
-            'program_studi' => 'required|string|max:100',
+            'prodi_id' => 'required',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'mahasiswa_ids' => 'required|array|min:1',
@@ -39,7 +56,7 @@ class PengajuanController extends Controller
         // Simpan pengajuan
         $pengajuan = Pengajuan::create([
             'user_id' => auth()->id(), // atau dari relasi dosen
-            'program_studi' => $request->program_studi,
+            'prodi_id' => $request->prodi_id,
             'jenis_program_id' => $request->jenis_program_id,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
@@ -55,14 +72,19 @@ class PengajuanController extends Controller
     {
         $pengajuan = Pengajuan::with('mahasiswas')->findOrFail($id);
         $jenis_programs = JenisProgram::all();
-        $mahasiswas = Mahasiswa::where('user_id', auth()->id())->get();
-        return view('dosen.pengajuan.edit', compact('pengajuan', 'jenis_programs', 'mahasiswas'));
+        // $mahasiswas = Mahasiswa::where('user_id', auth()->id())->get();
+        $fakultas = Auth::user()->fakultas;
+        $prodi_ids = $fakultas->prodi->pluck('id');
+        $mahasiswas = Mahasiswa::whereIn('prodi_id', $prodi_ids)->get();
+
+        $prodi = Auth::user()->fakultas->prodi;
+        return view('dosen.pengajuan.edit', compact('pengajuan', 'jenis_programs', 'mahasiswas','prodi'));
     }
     public function update(Request $request, $id)
     {
         $request->validate([
             'jenis_program_id' => 'required|exists:jenis_programs,id',
-            'program_studi' => 'required|string|max:100',
+            'prodi_id' => 'required',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'mahasiswa_ids' => 'required|array|min:1',
@@ -74,7 +96,7 @@ class PengajuanController extends Controller
         }
         $pengajuan->update([
             'jenis_program_id' => $request->jenis_program_id,
-            'program_studi' => $request->program_studi,
+            'prodi_id' => $request->prodi_id,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
             'status' => 'diajukan', // bisa disesuaikan

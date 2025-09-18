@@ -108,7 +108,7 @@
                 <td>Untuk Pembayaran</td>
                 <td>:</td>
                 <td> {{ $pengajuan->invoice ? 'INV/' . $pengajuan->invoice->id . '/' . now()->year : '-' }}<br>
-                    {{ $pengajuan->jenisProgram->nama ? 'Permohonan ' . $pengajuan->jenisProgram->nama . ' ' . $pengajuan->program_studi : '' }}<br>
+                    {{ $pengajuan->jenisProgram->nama ? 'Permohonan ' . $pengajuan->jenisProgram->nama . ' ' . $pengajuan->prodi->jenjang . '-' . $pengajuan->prodi->nama : '' }}<br>
                     Periode {{ \Carbon\Carbon::parse($pengajuan->tanggal_mulai)->locale('id')->translatedFormat('d F Y') }}
                     s/d {{ \Carbon\Carbon::parse($pengajuan->tanggal_selesai)->locale('id')->translatedFormat('d F Y') }}
                 </td>

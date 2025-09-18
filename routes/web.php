@@ -113,6 +113,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 Route::middleware(['auth'])->prefix('dosen')->name('dosen.')->group(function () {
     Route::resource('pengajuan', DosenPengajuanController::class)->except('show');
 });
+Route::get('/admin/get-mahasiswa-by-prodi/{prodi_id}', [DosenPengajuanController::class, 'getMahasiswaByProdi']);
 
 //Verifikasi Pengajuan
 Route::prefix('admin')->middleware(['auth'])->group(function () {

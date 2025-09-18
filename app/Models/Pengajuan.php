@@ -10,7 +10,7 @@ class Pengajuan extends Model
     protected $fillable = [
         'user_id',
         'jenis_program_id',
-        'program_studi',
+        'prodi_id',
         'tanggal_mulai',
         'tanggal_selesai',
         'status',
@@ -39,7 +39,7 @@ class Pengajuan extends Model
 
     public function prodi()
     {
-        return $this->belongsToMany(Prodi::class);
+        return $this->belongsTo(Prodi::class, 'prodi_id');
     }
 
     public function verifikator()

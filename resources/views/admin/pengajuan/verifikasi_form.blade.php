@@ -11,7 +11,7 @@
         {{-- Info Pengajuan --}}
         <div class="mb-4">
             <p><strong>Program:</strong> {{ $pengajuan->jenisProgram->nama }}</p>
-            <p><strong>Program Studi:</strong> {{ $pengajuan->program_studi }}</p>
+            <p><strong>Program Studi:</strong> {{ $pengajuan->prodi->jenjang }}-{{ $pengajuan->prodi->nama }}</p>
             <p><strong>Periode:</strong> {{ $pengajuan->tanggal_mulai }} s/d {{ $pengajuan->tanggal_selesai }}</p>
             <p><strong>Status Saat Ini:</strong>
                 @if($pengajuan->status == 'diterima')

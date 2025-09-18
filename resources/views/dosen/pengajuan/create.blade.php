@@ -18,9 +18,18 @@
     </div>
 
     {{-- Program Studi --}}
-    <div class="mb-3">
+    {{-- <div class="mb-3">
         <label for="program_studi">Program Studi</label>
         <input type="text" name="program_studi" class="form-control" required>
+    </div> --}}
+    <div class="mb-3">
+        <label>Program Studi</label>
+        <select name="prodi_id" id="prodi" class="form-control" required>
+            <option value="">-- Pilih Program Studi --</option>
+            @foreach($prodi as $f)
+                <option value="{{ $f->id }}">{{ $f->jenjang.'-'.$f->nama }}</option>
+            @endforeach
+        </select>
     </div>
 
     {{-- Tanggal --}}
@@ -59,8 +68,28 @@
     <button type="submit" class="btn btn-primary">Simpan Pengajuan</button>
 </form>
 {{-- SCRIPT --}}
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $('#prodi').on('change', function () {
+        var prodiID = $(this).val();
+        $('#input-mahasiswa').html('<option value="">Memuat...</option>');
+
+        if(prodiID) {
+            $.ajax({
+                url: '/admin/get-mahasiswa-by-prodi/' + prodiID,
+                type: 'GET',
+                success: function (data) {
+                    $('#input-mahasiswa').empty().append('<option value="">-- Pilih Mahasiswa --</option>');
+                    $.each(data, function (key, value) {
+                        $('#input-mahasiswa').append('<option value="' + value.id + '">' + value.nama + ' - ' + value.nim + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#input-mahasiswa').html('<option value="">-- Pilih Mahasiswa --</option>');
+        }
+    });
+
     let selectedMahasiswa = [];
 
     function tambahMahasiswa() {

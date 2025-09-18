@@ -98,7 +98,7 @@
                 <td class="nama" style="border-bottom: 2px solid #000; padding-top: 10px;">{{ $mhs->nama }}</td>
             </tr>
             <tr>
-                <td class="prodi" style="padding-top: 10px;">Pendidikan {{ strtoupper($pengajuan->program_studi) }}</td>
+                <td class="prodi" style="padding-top: 10px;">Pendidikan {{ strtoupper($pengajuan->prodi->jenjang) }}-{{ strtoupper($pengajuan->prodi->nama) }}</td>
             </tr>
             <tr>
                 <td class="kampus">{{ strtoupper($pengajuan->user->kampus->nama ?? '-') }}</td>
